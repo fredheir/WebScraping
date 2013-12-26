@@ -1,0 +1,27 @@
+Web Scraping - getting started
+========================================================
+author: Rolf Fredheim
+date: 
+
+Logging on
+========================================================
+Before you sit down:
+- Do you have your MCS password?
+- Do you have your Raven password?
+  - If you answered **'no'** to either then GO TO University Computing Services (just outside the door)NOW!
+- Are you registered? If not, see me!
+- **download these slides from X**
+
+
+========================================================
+
+```{r}
+summary(cars)
+```
+
+Slide With Plot
+========================================================
+
+```{r, echo=FALSE}
+plot(cars)
+```
