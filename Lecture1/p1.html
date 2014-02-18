@@ -811,34 +811,27 @@ hljs.initHighlightingOnLoad();
 
 </section>
 <section data-state="sq2" data-transition="linear" data-transition-speed="default">
-<h3>download these slides </h3>
-<div class="column column1 slideContent" >
+<h3>The hard bit: get the slides</h3>
+<div class="slideContent" >
 <p>download.file(&#39;<a href="https://raw.github.com/fredheir/WebScraping/master/Lecture1/p1.Rpres">https://raw.github.com/fredheir/WebScraping/master/Lecture1/p1.Rpres</a>&#39;,
 destfile=&#39;p1.Rpres&#39;)</p>
 
 <p>OR: download.file(&#39;<a href="http://goo.gl/ulTloi">http://goo.gl/ulTloi</a>&#39;, destfile=&#39;p1.Rpres&#39;)</p>
 
-<p>Open the file <strong>p1.Rpres</strong> in RStudio, and press <strong>preview</strong> to view the slides</p>
+<p>OLD RSTUDIO:
+markdown:</p>
 
-<p><img src=https://github.com/fredheir/WebScraping/blob/master/Lecture1/i1.jpg?raw=true" style="width: 80%;"/></p>
+<p>download.file(&#39;<a href="https://raw.github.com/fredheir/WebScraping/master/Lecture1/p1.Rpres">https://raw.github.com/fredheir/WebScraping/master/Lecture1/p1.Rpres</a>&#39;,
+destfile=&#39;p1.Rmd&#39;)</p>
+
+<p>slides in browse. Open:
+<a href="http://fredheir.github.io/WebScraping/Lecture1/p1.html">http://fredheir.github.io/WebScraping/Lecture1/p1.html</a></p>
+
+<p>Open the file <strong>p1.Rpres</strong> or <strong>p1.Rmd</strong> in RStudio, and press <strong>preview</strong> to view the slides</p>
+
+<p><img src=https://github.com/fredheir/WebScraping/blob/master/Lecture1/i1.jpg?raw=true" style="width: 50%;"/></p>
 
 <p>for more info about editing these slides, go <a href="http://www.rstudio.com/ide/docs/presentations/overview">here</a></p>
-
-
-</div>
-
-<div class="column column2 slideContent" >
-
-
-<p></p>
-
-<p>Old Rstudio: </p>
-
-<ul>
-<li>get slides as markdown</li>
-<li><p>view slides in browser</p></li>
-<li><p>markdown file: </p></li>
-</ul>
 
 </div>
 
@@ -940,17 +933,11 @@ destfile=&#39;p1.Rpres&#39;)</p>
 <section data-transition="linear" data-transition-speed="default">
 <h3>What will we do today?</h3>
 <div class="slideContent" >
-<pre><code class="r">#  require(ggplot2)
-#  source(&quot;fetchdata.r&quot;)
-#  a &lt;- fetchData(1,c(&quot;Web_scraping&quot;,&quot;Data_mining&quot;))
-#   print(head(a))
-# ```
-# ***
-# ```{r}
-#  a$date &lt;- as.Date(a$date)
-#  ggplot(a,aes(date,rd.views,colour=target))+geom_line()
-
+<pre><code class="r">a&lt;-fetchData(1,c(&quot;Web_scraping&quot;,&quot;Data_mining&quot;))
+ggplot(a,aes(date,rd.views,colour=target))+geom_line()
 </code></pre>
+
+<p><img src="https://github.com/fredheir/WebScraping/blob/master/Lecture1/p1.png?raw=true" alt="Drawing" /></p>
 
 </div>
 
