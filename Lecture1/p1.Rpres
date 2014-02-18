@@ -7,6 +7,7 @@ Web Scraping - getting started
 width: 1200
 author: Rolf Fredheim and Aiora Zabala
 date: University of Cambridge
+font-family: 'Rockwell'
 18/02/2014
 
 Logging on
@@ -19,7 +20,7 @@ Before you sit down:
   - If you answered **'no'** to either then go to the University Computing Services (just outside the door) NOW!
 - Are you registered? If not, see me!
 
-download these slides 
+Download these slides 
 ========================================================
 type:sq2
 
@@ -115,7 +116,7 @@ ggplot(a,aes(date,rd.views,colour=target))+geom_line()
 
 <img src="https://github.com/fredheir/WebScraping/blob/master/Lecture1/p1.png?raw=true" alt="Drawing" />
 
-What will we learn?
+What will we learn? 
 ====================
 1) manipulating URLs
 
