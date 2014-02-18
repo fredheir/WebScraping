@@ -1,7 +1,11 @@
+```{r setup, include=FALSE}
+opts_chunk$set(cache=TRUE)
+```
+
 Web Scraping - getting started
 ========================================================
 width: 1200
-author: Rolf Fredheim
+author: Rolf Fredheim and Aiora Zabala
 date: University of Cambridge
 18/02/2014
 
@@ -12,21 +16,96 @@ type: s1
 Before you sit down:
 - Do you have your MCS password?
 - Do you have your Raven password?
-  - If you answered **'no'** to either then GO TO University Computing Services (just outside the door)NOW!
+  - If you answered **'no'** to either then go to the University Computing Services (just outside the door) NOW!
 - Are you registered? If not, see me!
 
-Open the presentation
+download these slides 
 ========================================================
-- **download these slides from  https://github.com/fredheir/WebScraping**
-  - Open the file **p1.Rpres** in RStudio, and press **preview** to view the slides
-  
-<img src="i1.jpg" alt="Drawing" style="width: 100%;"/>
+type:sq2
+
+download.file('https://raw.github.com/fredheir/WebScraping/master/Lecture1/p1.Rpres',
+destfile='p1.Rpres')
+
+OR: download.file('http://goo.gl/ulTloi', destfile='p1.Rpres')
+
+Open the file **p1.Rpres** in RStudio, and press **preview** to view the slides
+
+<img src=https://github.com/fredheir/WebScraping/blob/master/Lecture1/i1.jpg?raw=true" style="width: 80%;"/>
 
 for more info about editing these slides, go [here](http://www.rstudio.com/ide/docs/presentations/overview)
 
+***
+<p></p>
+Old Rstudio: 
+- get slides as markdown
+- view slides in browser
+
+- markdown file: 
+
+Who is this course for
+===============
+<s>Computer scientists</s>
+
+Anyone with some minimal background in coding and good computer literacy
+
+
+By the end of the course you will have
+==============
+Created a system to extract text and numbers from a large number of web pages
+
+Learnt to harvest links
+
+Worked with an API to gather data, e.g. from YouTube
+
+Convert messy data into tabular data
+
+
+What will we need?
+==============
+A windows Computer
+
+A modern browser - Chrome or Firefox
+
+<s>~~An up to date version of Rstudio~~</s>
+
+
+Getting help
+============
+- ?[functionName]
+- StackOverflow
+- Ask each other. 
+
+
+Outline
+========================================================
+type:section
+
+**Theory**
+
+Practice
+
+
+What is 'Web Scraping'?
+========================================================
+From [Wikipedia](http://en.wikipedia.org/wiki/Web_scraping)
+> Web scraping (web harvesting or web data extraction) is a computer software technique of extracting information from websites.
+
+
+When might this be useful? (your examples)
+
+- 
+- 
+- 
+- 
+
+Imposing structure on data
+=========
+Again, from [Wikipedia](http://en.wikipedia.org/wiki/Web_scraping)
+> ... Web scraping focuses on the **transformation of unstructured data** on the web, typically in HTML format, into structured data that can be stored and analyzed in **a central local database or spreadsheet**. 
+
+
 What will we do today?
 ==============
-We will write a function that downloads Wikipedia page views, and returns this data in a format easy to process:
 
 ```{r}
 #  require(ggplot2)
@@ -49,31 +128,13 @@ What will we learn?
 
 3) automate collection through loops and functions
 
-What is 'Web Scraping'?
-========================================================
-From [Wikipedia](http://en.wikipedia.org/wiki/Web_scraping)
-> Web scraping (web harvesting or web data extraction) is a computer software technique of extracting information from websites.
 
-
-When might this be useful? (your examples)
-
-- 
-- 
-- 
-- 
-
-Imposing structure on data
-=========
-Again, from [Wikipedia](http://en.wikipedia.org/wiki/Web_scraping)
-> ... Web scraping focuses on the **transformation of unstructured data** on the web, typically in HTML format, into structured data that can be stored and analyzed in **a central local database or spreadsheet**. 
-
-With structured data we can do all sorts of exciting things; these will vary from person to person. In my work I have used time-series analyses, network analyses, (linear) regression, etc. 
 
 Example
 =======
 Approximate number of web pages
 
-<img src="i2.jpg" alt="Drawing" />
+<img src="https://github.com/fredheir/WebScraping/blob/master/Lecture1/i2.jpg?raw=true" alt="Drawing" />
 
 Tabulate this data
 ======
@@ -105,7 +166,16 @@ http://openbookpublishers.com/htmlreader/DHP/chap09.html#ch09
 Bandwidth
 =================
 <p align="center"><img src="http://www.cisco.com/web/about/ac123/ac147/images/ipj/ipj_7-4/dos_figure_4.gif" alt="Drawing" /></p>
+***
+> the agent machines (slave zombies) begin to send a large volume of packets to the victim, flooding its system with useless load and exhausting its resources.
 
+source: cisco.com
+
+We will not: 
+- run parallel processes
+
+we will:
+- test code on minimal data
 
 Practice
 ==============
@@ -146,53 +216,14 @@ http://stats.grok.se/json/en/201401/web_scraping
 {"daily_views": {"2013-01-12": 542, "2013-01-13": 593, "2013-01-10": 941, "2013-01-11": 798, "2013-01-16": 1119, "2013-01-17": 1124, "2013-01-14": 908, "2013-01-15": 1040, "2013-01-30": 1367, "2013-01-18": 1027, "2013-01-19": 743, "2013-01-31": 1151, "2013-01-29": 1210, "2013-01-28": 1130, "2013-01-23": 1275, "2013-01-22": 1131, "2013-01-21": 1008, "2013-01-20": 707, "2013-01-27": 789, "2013-01-26": 747, "2013-01-25": 1073, "2013-01-24": 1204, "2013-01-01": 379, "2013-01-03": 851, "2013-01-02": 807, "2013-01-05": 511, "2013-01-04": 818, "2013-01-07": 745, "2013-01-06": 469, "2013-01-09": 946, "2013-01-08": 912}, "project": "en", "month": "201301", "rank": -1, "title": "web_scraping"}
 
 
-Paste
-==================
-Check out ?paste if you are unsure about this 
 
-Bonus: check out ?paste0 for a timesaving bonus
+Outline
+========================================================
+type:section
 
-```{r}
-var=123
-paste("url",var,sep="")
-paste("url",var,sep=" ")
-```
+Theory
 
-Paste2
-==================
-```{r}
-var=123
-paste("url",rep(var,3),sep="_")
-paste(rep("url",3),var,sep="_")
-paste("url",paste(rep(var,3),collapse="X"),sep="_")
-```
-
-With a URL
-===========================
-type:sq
-```{r}
-var=201401
-paste("http://stats.grok.se/json/en/",var,"/web_scraping")
-paste("http://stats.grok.se/json/en/",var,"/web_scraping",sep="")
-```
-
-Task using 'paste'
-==============
-a="test"
-
-b="scrape"
-
-c=94
-
-merge variables a,b,c into a string, separated by an underscore ("_")
-> "test_scrape_94"
-
-merge variables a,b,c into a string without any separating character
-> "testscrape94"
-
-print the letter 'a' followed by the numbers 1:10, without a separating character
-> "a1"  "a2"  "a3"  "a4"  "a5"  "a6"  "a7"  "a8"  "a9"  "a10"
-
+**Practice**
 
 
 
@@ -211,6 +242,58 @@ type:section
 - **Scraping**
 - Loops
 
+
+Paste
+==================
+Check out ?paste if you are unsure about this 
+
+Bonus: check out ?paste0
+
+```{r}
+var=123
+paste("url",var,sep="")
+paste("url",var,sep=" ")
+```
+
+Paste2
+==================
+```{r}
+var=123
+paste("url",rep(var,3),sep="_")
+paste(rep("url",3),var,sep="_")
+var=c(123,421)
+paste(var,collapse="_")
+```
+
+With a URL
+===========================
+type:sq
+```{r}
+var=201401
+paste("http://stats.grok.se/json/en/",var,"/web_scraping")
+paste("http://stats.grok.se/json/en/",var,"/web_scraping",sep="")
+```
+
+Task using 'paste'
+==============
+type:sq
+a="test"
+
+b="scrape"
+
+c=94
+
+merge variables a,b,c into a string, separated by an underscore ("_")
+> "test_scrape_94"
+
+merge variables a,b,c into a string without any separating character
+> "testscrape94"
+
+print the letter 'a' followed by the numbers 1:10, without a separating character
+> "a1"  "a2"  "a3"  "a4"  "a5"  "a6"  "a7"  "a8"  "a9"  "a10"
+
+
+
 Testing a URL is correct in R
 ==============
 Run this in your terminal:
@@ -225,8 +308,9 @@ browseURL(url)
 
 Fetching data
 ==================
+type:sq1
 ```{r}
-require(rjson)
+var=201401
 url=paste("http://stats.grok.se/json/en/",var,"/web_scraping",sep="")
 raw.data <- readLines(url, warn="F") 
 raw.data
@@ -235,6 +319,8 @@ raw.data
 Fetching data2
 ==================
 ```{r}
+#install.packages("rjson")
+require(rjson)
 rd  <- fromJSON(raw.data)
 rd
 ```
@@ -264,18 +350,24 @@ df <- as.data.frame(unlist(rd.views))
 
 Plot it
 =================
+type:sq
 ```{r}
 require(ggplot2)
 require(lubridate)
 df$date <-  as.Date(rownames(df))
 colnames(df) <- c("views","date")
-ggplot(df,aes(date,views))+geom_line()+geom_smooth()
+ggplot(df,aes(date,views))+
+  geom_line()+
+  geom_smooth()+
+  theme_bw(base_size=20)
 ```
 
 Tasks
 ====================
-Make a plot of wikipedia page views in February 2014 for the Sochi games 
+type:section
+Plot Wikipedia page views in February 2014 for the Sochi games 
 
+How does this compare to the number of views on the Russian language wikipedia page?
 
 Moving on
 =========================
@@ -318,15 +410,6 @@ plusOne2 <- function(num){
 ```
 
 
-Vectors
-=============
-```{r}
-a <- c(1,2,3,4,5) #Least flexible, fastest
-a+1
-plusOne(a) #Quite flexible
-sapply(a,plusOne) #Can be used in all sorts of situations, slow - similar to a loop, better if you are colleting an output
-```
-
 Simple loops
 =============
 ```{r}
@@ -363,7 +446,9 @@ type:sq
 a <- c(1,2,3,4,5)
 a[1] #The first number in the vector
 a[4] #The fourth number in the vector
-
+```
+***
+```{r}
 for (i in 1:length(a)){
 	print (
 		plusOne(a[i])
@@ -387,6 +472,14 @@ print (length(a))
 print (a)
 ```
 
+Vectors
+=============
+```{r}
+a <- c(1,2,3,4,5) #Least flexible, fastest
+a+1
+plusOne(a) #Quite flexible
+sapply(a,plusOne) #Can be used in all sorts of situations, slow - similar to a loop, better if you are colleting an output
+```
 
 
 
@@ -425,17 +518,15 @@ type:sq
 left:60
 ```{r}
 dates=NULL
-for (year in 2012:2013){
 	for (month in 1:9){
-		date=(paste(year,0,month,sep=""))
+		date=(paste(2012,0,month,sep=""))
 		dates=c(dates,date)
 	}
 
 	for (month in 10:12){
-		date=(paste(year,month,sep=""))
+		date=(paste(2012,month,sep=""))
 		dates=c(dates,date)
 	}
-}
 print (as.numeric(dates))
 ```
 ***
@@ -466,11 +557,9 @@ for (year in 2012:2013){
 Putting it together
 ============================
 type:sq
-
-http://stats.grok.se/json/en/201401/web_scraping
 ```{r}
 for (year in 2012:2013){
-	for (month in 1:9){
+  for (month in 1:9){
 		print(paste("http://stats.grok.se/json/en/",year,0,month,"/web_scraping",sep=""))
 	}
 
@@ -480,24 +569,40 @@ for (year in 2012:2013){
 }
 ```
 
+
 Tasks about Loops
 ==================
-- write a loop that prints every number between 1 and 1000
-- write a loop that adds up all the numbers between 1 and 1000
-- write a function that takes an input number and returns this number divided by two
-- write a function that returns the value 99 no matter what the input
-- write a function that takes two variables, and returns the sum of these variables
+type: section
+- Write a loop that prints every number between 1 and 1000
+- Write a loop that adds up all the numbers between 1 and 1000
+- Write a function that takes an input number and returns this number divided by two
+- Write a function that returns the value 99 no matter what the input
+- Write a function that takes two variables, and returns the sum of these variables
 
 Advanced tasks
 =========================
-can you make an application which takes a wikipedia page (e.g. web_scraping) and returns a plot for the month 201312
-Can you extend this application to plot data for the entire year 2013 (that is for pages 201301:201312)
-Can you expand this further by going accross multiple years (201212:201301)
-Can you write the application so that it takes a custom data range?
+type: section
+- Can you make an application which takes a Wikipedia page (e.g. Web_scraping) and returns a plot for the month 201312
+- Can you extend this application to plot data for the entire year 2013 (that is for pages 201301:201312)
+- Can you expand this further by going across multiple years (201212:201301)
+- Can you write the application so that it takes a custom data range?
+- If you have time, keep expanding functionality: multiple pages, multiple languages. you could also make it interactive using [Shiny](http://www.rstudio.com/shiny/)
+
 
 Getting started with functions
 =============================
-
+```{r}
+getData <- function(url){
+	raw.data <- readLines(url, warn="F") 
+	rd  <- fromJSON(raw.data)
+	rd.views <- rd$daily_views 
+	rd.views <- unlist(rd.views)
+	rd <- as.data.frame(rd.views)
+  rd$date <- rownames(rd)
+  rownames(rd) <- NULL
+	return(rd)
+}
+```
 
 Reading
 =============
@@ -507,3 +612,71 @@ http://blog.hartleybrody.com/web-scraping/
 http://openbookpublishers.com/htmlreader/DHP/chap09.html#ch09
 http://www.essex.ac.uk/ldev/documents/going_digital/scraping_book.pdf
 https://software.rc.fas.harvard.edu/training/scraping2/latest/index.psp#(1) 
+
+
+
+<!-- CSS formatting used in these slides -->
+
+<style>.s1 .reveal .state-background {
+  background: #E0E0FF;
+} 
+
+.sq1 .reveal section code {
+  font-size:145%;
+}
+.sq1 .reveal section p {
+  font-size:100%;
+}
+
+
+.sq .reveal section code {
+	font-size:125%;
+}
+.sq .reveal section p {
+  font-size:85%;
+}
+
+
+.sq2 .reveal section code {
+	font-size:100%;
+}
+.sq2 .reveal section p {
+  font-size:70%;
+}
+.reveal blockquote {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 5px auto;
+  padding: 5px;
+
+  font-style: normal;
+  background: #C6D7DC;
+  border: 1px solid #C6D7DC;
+  box-shadow: none;
+}
+
+.reveal pre {   
+  margin-top: 0;
+  max-width: 100%;
+  width: 100%;
+  border: 1px solid #ccc;
+  white-space: pre-wrap;
+  margin-bottom: 1em; 
+}
+
+.reveal pre code {
+/*  display: block; padding: 0.5em;
+*/  font-size: 1.6em;
+  line-height: 1.1em;
+  background-color: white;
+  overflow: visible;
+  max-height: none;
+  word-wrap: normal;
+}
+
+.reveal section centered {
+	text-align: center;
+   border: none;
+}
+</style>
