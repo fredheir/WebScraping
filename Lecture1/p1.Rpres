@@ -34,7 +34,7 @@ markdown:
 download.file('https://raw.github.com/fredheir/WebScraping/master/Lecture1/p1.Rpres',
 destfile='p1.Rmd')
 
-slides in browse. Open:
+slides in browser. Open:
 http://fredheir.github.io/WebScraping/Lecture1/p1.html
 
 Open the file **p1.Rpres** or **p1.Rmd** in RStudio, and press **preview** to view the slides
