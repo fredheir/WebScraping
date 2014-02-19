@@ -1,8 +1,31 @@
+#Loops and functions
+===============
+#1)
+for (i in 1:1000) print (i)
+total=0
 
+#2)
+for (i in 1:1000) {
+  total=total+i
+	}
+total
+
+#3) 
+divideByTwo <- function(x) return(x/2)
+divideByTwo(10)
+
+#4) 
+ninetynine <- function(x) return (99)
+
+#5)
+addThem <- function(x,y) return(x+y)
+
+
+#One take on how to scrape Wikipedia pageviews
   
 getData <- function(url){
-  require(rjson)
   #function to download data in json format
+  require(rjson)
 	raw.data <- readLines(url, warn="F") 
 	rd  <- fromJSON(raw.data)
 	rd.views <- rd$daily_views 
@@ -29,7 +52,6 @@ getUrls <- function(y1,y2,term){
     return(urls)
 }
   
-term="Web_scraping"
 getStats <- function(y1,y2,terms){
   #function to download data for each term
   #returns a dataframe
