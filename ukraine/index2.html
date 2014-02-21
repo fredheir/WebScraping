@@ -10,6 +10,8 @@
 <form><label><input type="radio" name="mode" value="police"> Police</label> <label><input type="radio" name="mode" value="protesters" checked> Protesters</label></form>
 
 <script src="scripts/d3.v3.min.js"></script> 
+<script src="scripts/topojson.v146.js"></script> 
+<script src="scripts/queue.v1.min.js"></script>
 <script>
 
 var ds="p"
@@ -18,6 +20,22 @@ var whoKilled="protesters"
 
 var width = 700,
     height = width/1.5;
+
+var projection = d3.geo.albers()
+    .center([0, 50])
+    .rotate([-30, 0])
+    .parallels([50, 60])
+    .scale(width*4.5)
+    .translate([width / 2.3, height / 3]);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+
+var rateByI = d3.map();
+var names = d3.map();
+var pn = d3.map();
+var pn2 = d3.map();
 
 var quantize = d3.scale.quantize()
     .domain([0, 7])
