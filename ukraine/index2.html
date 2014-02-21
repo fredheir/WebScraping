@@ -10,8 +10,6 @@
 <form><label><input type="radio" name="mode" value="police"> Police</label> <label><input type="radio" name="mode" value="protesters" checked> Protesters</label></form>
 
 <script src="scripts/d3.v3.min.js"></script> 
-<script src="scripts/topojson.v146.js"></script> 
-<script src="scripts/queue.v1.min.js"></script>
 <script>
 
 var ds="p"
@@ -20,22 +18,6 @@ var whoKilled="protesters"
 
 var width = 700,
     height = width/1.5;
-
-var projection = d3.geo.albers()
-    .center([0, 50])
-    .rotate([-30, 0])
-    .parallels([50, 60])
-    .scale(width*4.5)
-    .translate([width / 2.3, height / 3]);
-
-var path = d3.geo.path()
-    .projection(projection);
-
-
-var rateByI = d3.map();
-var names = d3.map();
-var pn = d3.map();
-var pn2 = d3.map();
 
 var quantize = d3.scale.quantize()
     .domain([0, 7])
@@ -59,7 +41,7 @@ function trans(word){
    a["Ф"]="F";a["Ы"]="Y";a["В"]="V";a["А"]="A";a["П"]="P";a["Р"]="R";a["О"]="O";a["Л"]="L";a["Д"]="D";a["Ж"]="Zh";a["Э"]="E";
    a["ф"]="f";a["ы"]="y";a["в"]="v";a["а"]="a";a["п"]="p";a["р"]="r";a["о"]="o";a["л"]="l";a["д"]="d";a["ж"]="zh";a["э"]="e";
    a["Я"]="Ya";a["Ч"]="Ch";a["С"]="S";a["М"]="M";a["И"]="I";a["Т"]="T";a["Ь"]="'";a["Б"]="B";a["Ю"]="Yu";
-   a["я"]="ia";a["ч"]="ch";a["с"]="s";a["м"]="m";a["и"]="i";a["т"]="t";a["ь"]="'";a["б"]="b";a["ю"]="iu";a["є"]="e";a["Є"]="Ye";
+   a["я"]="ia";a["ч"]="ch";a["с"]="s";a["м"]="m";a["и"]="i";a["т"]="t";a["ь"]="'";a["б"]="b";a["ю"]="iu";a["є"]="e";a["Є"]="Ye";a["і"]="i";a["Ї"]="Yi";
 
    for (i in word){
    if (word.hasOwnProperty(i)) {
@@ -117,11 +99,12 @@ function ready(error,uk){
     .style("opacity", 1)
 	  sss=d.id.toString()
     if (ds=="s"){
-      whoKilled="policemen"
+      whoKilled="Policemen"
       sss=mm(pn2,sss).toString()
     }
     else {
       sss=mm(pn,sss).toString()
+      whoKilled="Protesters"
     }
     sss=sss.replace(/,/g,"","g")
     sss=trans(sss)
