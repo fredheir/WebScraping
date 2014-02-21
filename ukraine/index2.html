@@ -1,0 +1,192 @@
+
+<!DOCTYPE html><meta charset="utf-8"><style>
+
+
+</style> <body>
+
+<link rel="stylesheet" type="text/css" href="scripts/style.css"> </link>
+<h1>Deaths in Ukrainian Protests, 18-20 Feb</h1>
+
+<form><label><input type="radio" name="mode" value="police"> Police</label> <label><input type="radio" name="mode" value="protesters" checked> Protesters</label></form>
+
+<script src="scripts/d3.v3.min.js"></script> 
+<script src="scripts/topojson.v146.js"></script> 
+<script src="scripts/queue.v1.min.js"></script>
+<script>
+
+var ds="p"
+var whoKilled="protesters"
+
+
+var width = 700,
+    height = width/1.5;
+
+var projection = d3.geo.albers()
+    .center([0, 50])
+    .rotate([-30, 0])
+    .parallels([50, 60])
+    .scale(width*4.5)
+    .translate([width / 2.3, height / 3]);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+
+var rateByI = d3.map();
+var names = d3.map();
+var pn = d3.map();
+var pn2 = d3.map();
+
+var quantize = d3.scale.quantize()
+    .domain([0, 7])
+    .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+ var div = d3.select("body").append("div")   
+  .attr("class", "tooltip")               
+  .style("opacity", 0);
+
+
+function trans(word){
+  var answer = ""
+    , a = {};
+
+   a["Ё"]="Yo";a["Й"]="I";a["Ц"]="Ts";a["У"]="U";a["К"]="K";a["Е"]="E";a["Н"]="N";a["Г"]="G";a["Ш"]="Sh";a["Щ"]="Shch";a["З"]="Z";a["Х"]="Kh";a["Ъ"]="'";
+   a["ё"]="yo";a["й"]="i";a["ц"]="ts";a["у"]="u";a["к"]="k";a["е"]="e";a["н"]="n";a["г"]="g";a["ш"]="sh";a["щ"]="shch";a["з"]="z";a["х"]="kh";a["ъ"]="'";
+   a["Ф"]="F";a["Ы"]="Y";a["В"]="V";a["А"]="A";a["П"]="P";a["Р"]="R";a["О"]="O";a["Л"]="L";a["Д"]="D";a["Ж"]="Zh";a["Э"]="E";
+   a["ф"]="f";a["ы"]="y";a["в"]="v";a["а"]="a";a["п"]="p";a["р"]="r";a["о"]="o";a["л"]="l";a["д"]="d";a["ж"]="zh";a["э"]="e";
+   a["Я"]="Ya";a["Ч"]="Ch";a["С"]="S";a["М"]="M";a["И"]="I";a["Т"]="T";a["Ь"]="'";a["Б"]="B";a["Ю"]="Yu";
+   a["я"]="ia";a["ч"]="ch";a["с"]="s";a["м"]="m";a["и"]="i";a["т"]="t";a["ь"]="'";a["б"]="b";a["ю"]="iu";a["є"]="e";a["Є"]="Ye";
+
+   for (i in word){
+   if (word.hasOwnProperty(i)) {
+     if (a[word[i]] === undefined){
+     answer += word[i];
+     } else {
+     answer += a[word[i]];
+     }
+   }
+   }
+   return answer;
+}
+
+
+queue()
+    .defer(d3.json, "data/ukraine.json")
+    .defer(d3.csv, "data/pout.csv", function(d) { 
+      rateByI.set(d.id, +d.count)
+      names.set(d.id, d.name)
+      ; })
+     .defer(d3.csv, "data/pout2.csv", function(d) { 
+      s=(d.name+": age "+d.age+"<br/>").toString()
+      pn.set(s,d.id)
+      ; })
+      .defer(d3.csv, "data/sout2.csv", function(d) { 
+      s=(d.name+": age "+d.age+"<br/>").toString()
+      pn2.set(s,d.id)
+      ; })
+    .await(ready,ds);
+
+
+
+mm = function(l,value ) {
+	var p=[""]
+    for( var prop in l ) {
+             if( l[ prop ] == value )
+                 p.push(prop)
+    }
+     return(p)
+}
+
+function ready(error,uk){
+      	svg.append("g")
+		.selectAll("path")
+      		.data(topojson.feature(uk, uk.objects.collection).features)
+	    .enter().append("path")
+
+	       .attr("class", function(d) { return quantize(rateByI.get(d.id)); })
+	      .attr("d", path)
+	      .style("opacity",1)
+  //Adding mouseevents
+  .on("mouseover", function(d) {
+    d3.select(this).transition().duration(20).style("opacity", 0.8);
+    div.transition().duration(20)
+    .style("opacity", 1)
+	  sss=d.id.toString()
+    if (ds=="s"){
+      whoKilled="policemen"
+      sss=mm(pn2,sss).toString()
+    }
+    else {
+      sss=mm(pn,sss).toString()
+    }
+    sss=sss.replace(/,/g,"","g")
+    sss=trans(sss)
+    div.html("<strong>Region:  "+names.get(d.id)+"<br/> "+whoKilled+" killed: "+rateByI.get(d.id)+"</strong>  <br/><br/>"+sss)
+    .style("left", (d3.event.pageX) + "px")
+    .style("top", (d3.event.pageY -5) + "px");
+  })
+  .on("mouseout", function() {
+    d3.select(this)
+    .transition().duration(20)
+    .style("opacity", 1);
+    div.transition().duration(20)
+    .style("opacity", 0);
+  })
+
+
+  svg.append("path")
+      .datum(topojson.mesh(uk, uk.objects.collection, function(a, b) { return a !== b; }))
+      .attr("d", path)
+      .attr("class", "subunit-boundary");
+
+  svg.append("path")
+      .datum(topojson.mesh(uk, uk.objects.collection, function(a, b) { return a == b; }))
+      .attr("d", path)
+      .attr("class", "subunit-boundary2");
+
+}
+
+d3.selectAll("input").on("change", change);
+
+var timeout = setTimeout(function() {
+  d3.select("input[value=\"protesters\"]").property("checked", true).each(change);
+}, 2000);
+
+var blah =""
+
+function change() {
+  clearTimeout(timeout);
+  if (this.value === "protesters") {
+  ds="p"
+  var pn = d3.map();
+  queue()
+      .defer(d3.json, "data/ukraine.json")
+         .defer(d3.csv, "data/pout.csv", function(d) { 
+      rateByI.set(d.id, +d.count)
+      ; })
+     .defer(d3.csv, "data/pout2.csv", function(d) { 
+      s=(d.name+": age "+d.age+"<br/>").toString()
+      pn.set(s,d.id)
+      ; })
+    .await(ready);
+  }
+  else{
+  ds="s"
+  var pn = d3.map();
+  queue()
+      .defer(d3.json, "data/ukraine.json")
+         .defer(d3.csv, "data/sout.csv", function(d) { 
+      rateByI.set(d.id, +d.count)
+      ; })
+     .defer(d3.csv, "data/sout2.csv", function(d) { 
+      s=(d.name+": age "+d.age+"<br/>").toString()
+      pn.set(s,d.id)
+      ; })
+    .await(ready);  }
+}
+
+</script> 
