@@ -9,7 +9,7 @@ id,count,name
 8,1,Kharkiv
 9,0,Kherson
 10,0,Khmel'nyts'kyy
-11,3,Kiev City
+11,2,Kiev City
 12,0,Kiev
 13,0,Kirovohrad
 14,0,L'viv
@@ -23,6 +23,6 @@ id,count,name
 22,0,Ternopil'
 23,0,Transcarpathia
 24,0,Vinnytsya
-25,1,Volyn
+25,0,Volyn
 26,1,Zaporizhzhya
 27,0,Zhytomyr

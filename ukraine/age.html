@@ -36,7 +36,6 @@ var whoKilled="protesters"
 var values = d3.range(1000).map(d3.random.bates(10));
 var formatCount = d3.format(",.0f");
 
-var parsedCSV = d3.csv.parseRows("");
 // A formatter for counts.
 
 var margin = {top: 10, right: 30, bottom: 30, left: 30},
@@ -48,14 +47,18 @@ var x = d3.scale.linear()
     .range([0, width]);
 
 var age
+var pn
 
 d3.csv("data/pout2.csv", function(data) {
    //dataset = data.map(function(d) { return  [+d["id"], d["name"]] ; });
-   age = data.map(function(d) { return  +d["age"] ; });
+   age = data.map(function(d) { return  +d.age ; });
+   pn = data.map(function(d) {return d.name})
+   ready(age)
 
-
+})
 
 // Generate a histogram using twenty uniformly-spaced bins.
+function ready(age){
   var data = d3.layout.histogram()
       .bins(x.ticks(20))
       (age);
@@ -96,7 +99,6 @@ d3.csv("data/pout2.csv", function(data) {
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
-
- });
+}
 
 </script> 
