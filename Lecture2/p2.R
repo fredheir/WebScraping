@@ -269,7 +269,7 @@ guardianScraper <- function(url){
   SOURCE <-  getURL(url,encoding="UTF-8") # Specify encoding when dealing with non-latin characters
   PARSED <- htmlParse(SOURCE)
   title <- xpathSApply(PARSED, "//h1[contains(@itemprop,'headline')]",xmlValue)
-  author <- xpathSApply(PARSED, "//time[@itemprop='datePublished']",xmlValue)
+  author <- xpathSApply(PARSED, "//a[@class='contributor']",xmlValue)
   time  <- xpathSApply(PARSED, "//time[@itemprop='datePublished']/@datetime")
   tags <- unique(xpathSApply(PARSED, "//a[@rel='tag']",xmlValue))
   text <- xpathSApply(PARSED, "//div[@id='article-body-blocks']/p",xmlValue)
@@ -298,7 +298,7 @@ url <- "http://www.theguardian.com/uk"
 
 #This is a bit tricky, apologies. There may be a better way
 d <- lapply(urls,guardianScraper)
-data <- data.frame(matrix(unlist(d),nrow=2,byrow=T))
+data <- data.frame(matrix(unlist(d),ncol=5,byrow=T))
 colnames(data) <- c("title","author","time","tags","text")
 as.character(data$tags)
 
@@ -336,6 +336,12 @@ url <- "http://www.theguardian.com/commentisfree/2014/feb/25/how-much-cost-growe
   PARSED <- htmlParse(SOURCE)
   xpathSApply(PARSED, "//a[@class='d2-username']",xmlValue)
 
+unique(c("r","fes","r"))
+duplicated
+
+author="By Rolf"
+author <- gsub("By ","",author)
+author
 
 #Solutions (1: Mirror)=========================
 #MIRROR
