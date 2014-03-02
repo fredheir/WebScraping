@@ -1,7 +1,8 @@
 .subunit-boundary {
   fill: none;
-  stroke: #555;
-  stroke-dasharray: 4;
+  stroke: #444;
+  stroke-width: 0.8px;
+  stroke-dasharray:0.8,3;
   stroke-linejoin: round;
 }
 
@@ -14,26 +15,25 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 /*black to red*/
-.q0-9 { fill:rgb(0,0,0) ; }
-.q1-9 {  fill:rgb(70,0,0) ; }
-.q2-9 {  fill:rgb(100,0,0) ; }
-.q3-9 { fill:rgb(120,0,0) ; }
-.q4-9 { fill:rgb(140,0,0) ; }
-.q5-9 { fill:rgb(160,0,0) ; }
-.q6-9 { fill:rgb(190,0,0) ; }
-.q7-9 { fill:rgb(210,0,0) ; }
-.q8-9 { fill:rgb(255,0,0) ; }
+.q0-9 {fill:#990000;stroke:#990000;}
+.q1-9 {fill:#d7301f;stroke:#d7301f;}
+.q2-9 {fill:#ef6548;stroke:#ef6548;}
+.q3-9 {fill:#fc8d59;stroke:#fc8d59;}
+.q4-9 {fill:#fdbb84;stroke:#fdbb84;}
+.q5-9 {fill:#fdd49e;stroke:#fdd49e;}
+.q6-9 {fill:#fee8c8;stroke:#fee8c8;}
+.q7-9 {fill:#fff7ec;stroke:#fff7ec;}
+.q8-9 {fill:#ddd;stroke:#ddd;}
 
-/*white to red*/
-.q0-9 { fill:rgb(255,250,250) ; }
-.q1-9 {  fill:rgb(255,220,220) ; }
-.q2-9 {  fill:rgb(255,190,190) ; }
-.q3-9 { fill:rgb(255,150,150) ; }
-.q4-9 { fill:rgb(255,120,120) ; }
-.q5-9 { fill:rgb(255,90,90) ; }
-.q6-9 { fill:rgb(255,60,60) ; }
-.q7-9 { fill:rgb(255,30,30) ; }
-.q8-9 { fill:rgb(255,0,0) ; }
+
+.q9-9 {fill:#f7fbff;stroke:#f7fbff;}
+.q10-9 {fill:#deebf7;stroke:#deebf7;}
+.q11-9 {fill:#c6dbef;stroke:#c6dbef;}
+.q12-9 {fill:#9ecae1;stroke:#9ecae1;}
+.q13-9 {fill:#6baed6;stroke:#6baed6;}
+.q14-9 {fill:#4292c6;stroke:#4292c6;}
+.q15-9 {fill:#2171b5;stroke:#2171b5;}
+.q16-9 {fill:#084594;stroke:#084594;}
 
 div.tooltip {   
   position: absolute;           
@@ -49,3 +49,15 @@ div.tooltip {
   border-style:solid;       
 
 }   
+
+
+.textStyle{
+  opacity:0.4;
+}
+.dataPoint{
+  stroke:#999;
+  opacity:1;
+  fill:none;
+  stroke-width:2;
+}
+
