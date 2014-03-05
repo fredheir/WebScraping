@@ -10,6 +10,13 @@ date: University of Cambridge
 font-family: 'Rockwell'
 04/03/2014
 
+Catch up
+==================
+
+Slides from week 1: http://quantifyingmemory.blogspot.com/2014/02/web-scraping-basics.html
+
+Slides from week 2: http://quantifyingmemory.blogspot.com/2014/02/web-scraping-part2-digging-deeper.html
+
 Today we will:
 ========================================================
 
@@ -23,9 +30,9 @@ Today we will:
 Get the docs:
 http://fredheir.github.io/WebScraping/Lecture3/p3.html
 
-https://raw.github.com/fredheir/WebScraping/master/Lecture3/p3.Rpres
+http://fredheir.github.io/WebScraping/Lecture3/p3.Rpres
 
-http://fredheir.github.io/WebScraping/Lecture2/p3.R
+http://fredheir.github.io/WebScraping/Lecture3/p3.r
 
 
 Digital data collection
@@ -35,7 +42,7 @@ Digital data collection
 - Retrieve that data
 - **tabulate and store the data**
 
-Today we focus less on interacting with JSON or HTML; more on automatiting and repeating
+Today we focus less on interacting with JSON or HTML; more on automating and repeating
 
 
 Using a scraper
@@ -45,7 +52,7 @@ Using a scraper
 
 In code
 ===================
-Remember this from lat week?
+Remember this from last week?
 ```{r}
 bbcScraper <- function(url){
   SOURCE <-  getURL(url,encoding="UTF-8")
@@ -245,13 +252,13 @@ Copyright
 type:sq
 
 Reading
-http://about.bloomberglaw.com/practitioner-contributions/legal-issues-raised-by-the-use-of-web-crawling-and-scraping-tools-for-analytics-purposes/
-http://www.theguardian.com/media-tech-law/tangled-web-of-copyright-law
-http://matthewsag.com/googlebooks-decision-fair-use/
-http://www.bbc.co.uk/news/technology-26187730
-http://matthewsag.com/anotherbestpracitcescode/
-http://www.ipo.gov.uk//response-2011-copyright-final.pdf
-http://www.arl.org/storage/documents/publications/code-of-best-practices-fair-use.pdf
+- http://about.bloomberglaw.com/practitioner-contributions/legal-issues-raised-by-the-use-of-web-crawling-and-scraping-tools-for-analytics-purposes/
+- http://www.theguardian.com/media-tech-law/tangled-web-of-copyright-law
+- http://matthewsag.com/googlebooks-decision-fair-use/
+- http://www.bbc.co.uk/news/technology-26187730
+- http://matthewsag.com/anotherbestpracitcescode/
+- http://www.ipo.gov.uk//response-2011-copyright-final.pdf
+- http://www.arl.org/storage/documents/publications/code-of-best-practices-fair-use.pdf
 
 > One case involved an online activist who scraped the MIT website and ultimately downloaded millions of academic articles.  This guy is now free on bond, but faces dozens of years in prison and $1 million if convicted.
 
@@ -277,7 +284,7 @@ In 2013 Google Books was found to be 'fair use'
 Archiving and downloading 
 - databases can be used to 'facilitate non-consumptive research'
 
-Distinction made between freely available content, and that behind a paywall, requiring to accept conditions, etc.
+Distinction made between freely available content, and that behind a pay-wall, requiring to accept conditions, etc.
 
 Downloading
 ===========
@@ -316,7 +323,6 @@ Often files downloaded are corrupted. Setting mode ="wb" prevents "\n" causing h
 Example
 ===============
 
-
 http://lib.ru
 
 Library of Russian language copyright-free works. (like Gutenberg)
@@ -353,7 +359,6 @@ Can you write a loop to download the first ten links?
 Solutions
 ========================
 ```{r eval=F }
-fileNames <- 
 for (i in 1:10){
   parts <- unlist(str_split(links[i],"/"))
   outName <- parts[length(parts)]
@@ -497,7 +502,7 @@ date-months(6)
 date-days(1110)
 ```
 
-Date formatting
+
 ============
 type:sq1
 
@@ -681,6 +686,8 @@ dat
 Accessing the numbers
 =========
 type:sq1
+
+Here's how we grab the numbers from the list
 ```{r}
 dat$data[[1]]$like_count
 dat$data[[1]]$share_count
@@ -699,14 +706,14 @@ If there's any time left in class, why not:
 Finally
 ==================
 type:sq
-APIs are really usefull: we don't (normally!) have to worry about terms of use
+APIs are really useful: we don't (normally!) have to worry about terms of use
 
 Next week I'll bring a few along, and we'll spend most of class looking at writing scrapers for them.
 
 Examples:
 - Maps
 - Cricket scores
-- Youtube
+- YouTube
 - Lyrics
 - Weather
 - Stock market (ticker) info 

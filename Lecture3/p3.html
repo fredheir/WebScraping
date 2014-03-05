@@ -869,9 +869,9 @@ hljs.initHighlightingOnLoad();
 <p>Get the docs:
 <a href="http://fredheir.github.io/WebScraping/Lecture3/p3.html">http://fredheir.github.io/WebScraping/Lecture3/p3.html</a></p>
 
-<p><a href="https://raw.github.com/fredheir/WebScraping/master/Lecture3/p3.Rpres">https://raw.github.com/fredheir/WebScraping/master/Lecture3/p3.Rpres</a></p>
+<p><a href="http://fredheir.github.io/WebScraping/Lecture3/p3.Rpres">http://fredheir.github.io/WebScraping/Lecture3/p3.Rpres</a></p>
 
-<p><a href="http://fredheir.github.io/WebScraping/Lecture2/p3.R">http://fredheir.github.io/WebScraping/Lecture2/p3.R</a></p>
+<p><a href="http://fredheir.github.io/WebScraping/Lecture3/p3.r">http://fredheir.github.io/WebScraping/Lecture3/p3.r</a></p>
 
 </div>
 
@@ -885,7 +885,7 @@ hljs.initHighlightingOnLoad();
 <li><strong>tabulate and store the data</strong></li>
 </ul>
 
-<p>Today we focus less on interacting with JSON or HTML; more on automatiting and repeating</p>
+<p>Today we focus less on interacting with JSON or HTML; more on automating and repeating</p>
 
 </div>
 
@@ -901,7 +901,7 @@ hljs.initHighlightingOnLoad();
 <section data-transition="linear" data-transition-speed="default">
 <h3>In code</h3>
 <div class="slideContent" >
-<p>Remember this from lat week?</p>
+<p>Remember this from last week?</p>
 
 <pre><code class="r">bbcScraper &lt;- function(url){
   SOURCE &lt;-  getURL(url,encoding=&quot;UTF-8&quot;)
@@ -1226,14 +1226,17 @@ results
 <section data-state="sq" data-transition="linear" data-transition-speed="default">
 <h3>Copyright</h3>
 <div class="slideContent" >
-<p>Reading
-<a href="http://about.bloomberglaw.com/practitioner-contributions/legal-issues-raised-by-the-use-of-web-crawling-and-scraping-tools-for-analytics-purposes/">http://about.bloomberglaw.com/practitioner-contributions/legal-issues-raised-by-the-use-of-web-crawling-and-scraping-tools-for-analytics-purposes/</a>
-<a href="http://www.theguardian.com/media-tech-law/tangled-web-of-copyright-law">http://www.theguardian.com/media-tech-law/tangled-web-of-copyright-law</a>
-<a href="http://matthewsag.com/googlebooks-decision-fair-use/">http://matthewsag.com/googlebooks-decision-fair-use/</a>
-<a href="http://www.bbc.co.uk/news/technology-26187730">http://www.bbc.co.uk/news/technology-26187730</a>
-<a href="http://matthewsag.com/anotherbestpracitcescode/">http://matthewsag.com/anotherbestpracitcescode/</a>
-<a href="http://www.ipo.gov.uk//response-2011-copyright-final.pdf">http://www.ipo.gov.uk//response-2011-copyright-final.pdf</a>
-<a href="http://www.arl.org/storage/documents/publications/code-of-best-practices-fair-use.pdf">http://www.arl.org/storage/documents/publications/code-of-best-practices-fair-use.pdf</a></p>
+<p>Reading</p>
+
+<ul>
+<li><a href="http://about.bloomberglaw.com/practitioner-contributions/legal-issues-raised-by-the-use-of-web-crawling-and-scraping-tools-for-analytics-purposes/">http://about.bloomberglaw.com/practitioner-contributions/legal-issues-raised-by-the-use-of-web-crawling-and-scraping-tools-for-analytics-purposes/</a></li>
+<li><a href="http://www.theguardian.com/media-tech-law/tangled-web-of-copyright-law">http://www.theguardian.com/media-tech-law/tangled-web-of-copyright-law</a></li>
+<li><a href="http://matthewsag.com/googlebooks-decision-fair-use/">http://matthewsag.com/googlebooks-decision-fair-use/</a></li>
+<li><a href="http://www.bbc.co.uk/news/technology-26187730">http://www.bbc.co.uk/news/technology-26187730</a></li>
+<li><a href="http://matthewsag.com/anotherbestpracitcescode/">http://matthewsag.com/anotherbestpracitcescode/</a></li>
+<li><a href="http://www.ipo.gov.uk//response-2011-copyright-final.pdf">http://www.ipo.gov.uk//response-2011-copyright-final.pdf</a></li>
+<li><a href="http://www.arl.org/storage/documents/publications/code-of-best-practices-fair-use.pdf">http://www.arl.org/storage/documents/publications/code-of-best-practices-fair-use.pdf</a></li>
+</ul>
 
 <blockquote>
 <p>One case involved an online activist who scraped the MIT website and ultimately downloaded millions of academic articles.  This guy is now free on bond, but faces dozens of years in prison and $1 million if convicted.</p>
@@ -1279,7 +1282,7 @@ results
 <li>databases can be used to &#39;facilitate non-consumptive research&#39;</li>
 </ul>
 
-<p>Distinction made between freely available content, and that behind a paywall, requiring to accept conditions, etc.</p>
+<p>Distinction made between freely available content, and that behind a pay-wall, requiring to accept conditions, etc.</p>
 
 </div>
 
@@ -1378,8 +1381,7 @@ links[1]
 <section data-transition="linear" data-transition-speed="default">
 <h3>Solutions</h3>
 <div class="slideContent" >
-<pre><code class="r">fileNames &lt;- 
-for (i in 1:10){
+<pre><code class="r">for (i in 1:10){
   parts &lt;- unlist(str_split(links[i],&quot;/&quot;))
   outName &lt;- parts[length(parts)]
   print(outName)
@@ -1677,8 +1679,8 @@ str(date)
 
 </section>
 <section data-state="sq1" data-transition="linear" data-transition-speed="default">
-<h3>Date formatting</h3>
-<div class="slideContent" >
+
+<div class="slideContent noTitle" >
 <p>the full way to enter dates:</p>
 
 <pre><code class="r">as.Date(&quot;2014-01-31&quot;,&quot;%Y-%m-%d&quot;)
@@ -1944,6 +1946,8 @@ $data[[1]]$comment_count
 <section data-state="sq1" data-transition="linear" data-transition-speed="default">
 <h3>Accessing the numbers</h3>
 <div class="slideContent" >
+<p>Here&#39;s how we grab the numbers from the list</p>
+
 <pre><code class="r">dat$data[[1]]$like_count
 </code></pre>
 
@@ -1982,7 +1986,7 @@ $data[[1]]$comment_count
 <section data-state="sq" data-transition="linear" data-transition-speed="default">
 <h3>Finally</h3>
 <div class="slideContent" >
-<p>APIs are really usefull: we don&#39;t (normally!) have to worry about terms of use</p>
+<p>APIs are really useful: we don&#39;t (normally!) have to worry about terms of use</p>
 
 <p>Next week I&#39;ll bring a few along, and we&#39;ll spend most of class looking at writing scrapers for them.</p>
 
@@ -1991,7 +1995,7 @@ $data[[1]]$comment_count
 <ul>
 <li>Maps</li>
 <li>Cricket scores</li>
-<li>Youtube</li>
+<li>YouTube</li>
 <li>Lyrics</li>
 <li>Weather</li>
 <li>Stock market (ticker) info </li>
