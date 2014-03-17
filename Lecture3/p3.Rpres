@@ -56,7 +56,7 @@ Remember this from last week?
 ```{r}
 bbcScraper <- function(url){
   SOURCE <-  getURL(url,encoding="UTF-8")
-  PARSED <- htmlParse(SOURCE)
+  PARSED <- htmlParse(SOURCE,encoding="UTF-8")
   title=xpathSApply(PARSED, "//h1[@class='story-header']",xmlValue)
   date=as.character(xpathSApply(PARSED, "//meta[@name='OriginalPublicationDate']/@content"))
   if (is.null(date))    date <- NA

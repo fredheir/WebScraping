@@ -56,7 +56,7 @@ type:sq1
 > The practice of publishing APIs has allowed web communities to create an open architecture for sharing content and data between communities and applications. In this way, content that is created in one place can be dynamically posted and updated in multiple locations on the web
 
 -Wikipedia
-
+f
 - e.g. Facebook releases its API so third parties can develop software drawing on Facebook's data. 
 - Why might Facebook want to do that?
 
@@ -308,7 +308,7 @@ Select from four tasks:
 Social APIs
 ===============
 type:sq
-URL counts. These work similarly to Facebook API. 
+Share counts. These work similarly to Facebook API. 
 
 Twitter undocumented API:
 
