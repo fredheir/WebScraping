@@ -1,0 +1,531 @@
+```{r setup, include=FALSE}
+opts_chunk$set(cache=TRUE)
+```
+
+Web Scraping part 4: APIs
+========================================================
+width: 1200
+author: Rolf Fredheim and Aiora Zabala
+date: University of Cambridge
+font-family: 'Rockwell'
+11/03/2014
+
+Catch up
+==================
+
+Slides from week 1: http://quantifyingmemory.blogspot.com/2014/02/web-scraping-basics.html
+
+Slides from week 2: http://quantifyingmemory.blogspot.com/2014/02/web-scraping-part2-digging-deeper.html
+
+Slides from week 3: http://quantifyingmemory.blogspot.com/2014/03/web-scraping-scaling-up-digital-data.html
+
+Today we will:
+========================================================
+
+- Learn how to use an API
+- Get data from YouTube
+- Google and Yandex maps
+- ... and other APIs
+
+Get the docs:
+http://fredheir.github.io/WebScraping/Lecture4/p4.html
+
+http://fredheir.github.io/WebScraping/Lecture4/p4.Rpres
+
+http://fredheir.github.io/WebScraping/Lecture4/p4.r
+
+
+Digital data collection
+=======================
+
+- Devise a means of accessing data
+- **Retrieve that data**
+- tabulate and store the data
+
+Today is all about accessing diverse data soruces
+
+
+
+
+APIs
+================
+type:sq1
+
+
+
+> The practice of publishing APIs has allowed web communities to create an open architecture for sharing content and data between communities and applications. In this way, content that is created in one place can be dynamically posted and updated in multiple locations on the web
+
+-Wikipedia
+f
+- e.g. Facebook releases its API so third parties can develop software drawing on Facebook's data. 
+- Why might Facebook want to do that?
+
+Examples
+==================
+APIs allow applications to communicate with each other
+
+E.g?
+
+Examples
+================
+APIs allow applications to communicate with each other
+- Amazon API allows web-sites to link directly to products - up-to-date prices, option to buy
+- Buying stuff online: verification of credit-card data
+- Smartphone apps: e.g. for accessing Twitter
+- Maps with location data, e.g. Yelp
+- Share content between social networking sites
+- Embed videos
+- Log in via Facebook
+
+==============
+> When used in the context of web development, an API is typically defined as a set of Hypertext Transfer Protocol (HTTP) request messages, along with a definition of the structure of response messages, which is usually in an Extensible Markup Language (XML) or JavaScript Object Notation (JSON) format.
+-Wikipedia
+
+- Out: HTTP request
+- In: JSON or XML 
+
+- We can handle both processes through R
+- See week 1 for working with JSON, week 2 for XML 
+
+
+Facebook API 
+==================
+type:sq
+
+Last week we explored the Facebook API:
+
+```{r}
+fqlQuery='select share_count,like_count,comment_count from link_stat where url="'
+url="http://www.theguardian.com/world/2014/mar/03/ukraine-navy-officers-defect-russian-crimea-berezovsky"
+queryUrl = paste0('http://graph.facebook.com/fql?q=',fqlQuery,url,'"')  #ignoring the callback part
+lookUp <- URLencode(queryUrl) #What do you think this does?
+lookUp
+```
+
+Read it in:
+===============
+```{r}
+require(rjson)
+rd <- readLines(lookUp, warn="F") 
+dat <- fromJSON(rd)
+dat
+```
+
+
+Finding this information
+==================
+
+All very well, but how to cobble together that code? 
+
+First, find an API:
+
+http://www.programmableweb.com/apis/directory
+
+Google maps most popular. 
+
+
+
+Google maps API
+===============
+
+reading: http://www.jose-gonzalez.org/using-google-maps-api-r/#.Ux2LEflgy3M
+
+Wrapper functions in package dismo (also explore packages ggmaps, maptools)
+
+Two APIs of interest:
+- geo location
+- static maps
+
+What will these APIs give us?
+
+Docs:
+
+https://developers.google.com/maps/documentation/geocoding/
+https://developers.google.com/maps/documentation/staticmaps/
+
+Geocoding
+============
+
+https://developers.google.com/maps/documentation/geocoding/
+
+Required parameters:
+- address [place]
+- sensor [=false]
+
+options: bounds,key,language, region
+
+What will these options do? How would you go about using them?
+
+Example Query
+===================
+
+Query:
+- https://maps.googleapis.com/maps/api/geocode/json?
+- address=Kremlin,Moscow
+- sensor=false
+
+separate with '&'
+
+https://maps.googleapis.com/maps/api/geocode/json?address=Kremlin,Moscow&sensor=false
+
+Which of the JSON fields might we be interested in?
+
+write a function
+============
+One variable: address
+
+```{r}
+getUrl <- function(address,sensor = "false") {
+ root <- "http://maps.google.com/maps/api/geocode/json?"
+ u <- paste0(root,"address=", address, "&sensor=false")
+ return(URLencode(u))
+}
+getUrl("Kremlin, Moscow")
+```
+
+
+In use
+=================
+type:sq
+```{r}
+require(RJSONIO)
+target <- getUrl("Kremlin, Moscow")
+dat <- fromJSON(target)
+latitude <- dat$results[[1]]$geometry$location["lat"]
+longitude <- dat$results[[1]]$geometry$location["lng"]
+place <- dat$results[[1]]$formatted_address
+
+latitude
+longitude
+place
+```
+
+
+Getting a static map
+===================
+type:sq2
+
+https://developers.google.com/maps/documentation/staticmaps/
+
+base="http://maps.googleapis.com/maps/api/staticmap?center=""
+
+center= latitude (e.g 55.75), longitude (e.g. 37.62)
+
+OR: centre =place (Kremlin, Moscow)
+
+zoom (1= zoomed right out, 18 zoomed right in)
+
+maptype="hybrid" #satellite, hybrid, terrain, roadmap
+
+suffix = "&size=800x800&sensor=false&format=png""
+
+http://maps.googleapis.com/maps/api/staticmap?center=55.75,37.62&zoom=13&maptype=hybrid&size=800x800&sensor=false&format=png
+
+<img src=http://maps.googleapis.com/maps/api/staticmap?center=55.75,37.62&zoom=13&maptype=hybrid&size=800x800&sensor=false&format=png" style="height: 70%;"/>
+
+
+Construct that URL in R using paste?
+=============
+type:section
+
+be careful about commas and &s
+
+```{r}
+base="http://maps.googleapis.com/maps/api/staticmap?center="
+latitude=55.75
+longitude=37.62
+zoom=13
+maptype="hybrid"
+suffix ="&size=800x800&sensor=false&format=png"
+
+```
+
+Possible solution
+====================
+type:sq1
+```{r}
+base="http://maps.googleapis.com/maps/api/staticmap?center="
+latitude=55.75
+longitude=37.62
+zoom=13
+maptype="hybrid"
+suffix ="&size=800x800&sensor=false&format=png"
+
+target <- paste0(base,latitude,",",longitude,
+                 "&zoom=",zoom,"&maptype=",maptype,suffix)
+```
+
+What to do next...?
+===============
+Download the map:
+
+```{r}
+download.file(target,"test.png", mode = "wb")
+```
+
+Use it as a background image for plots, e.g. geo location as <a href="http://quantifyingmemory.blogspot.co.uk/2013/04/mapping-gdelt-data-in-r-and-some.html"> here</a>
+http://4.bp.blogspot.com/-gcmmsncQriY/UWvBOmwa8-I/AAAAAAAAAFY/LXRf8SXkzZc/s1600/gdelt4.png
+<img src=http://4.bp.blogspot.com/-gcmmsncQriY/UWvBOmwa8-I/AAAAAAAAAFY/LXRf8SXkzZc/s1600/gdelt4.png?raw=true" style="height: 70%;"/>
+
+
+
+Leftovers
+===========
+non-latin strings in scraper output:
+
+  PARSED <- htmlParse(SOURCE,**encoding="UTF-8"**)
+
+```{r}
+bbcScraper <- function(url){
+  SOURCE <-  getURL(url,encoding="UTF-8")
+  PARSED <- htmlParse(SOURCE,encoding="UTF-8")
+  title=xpathSApply(PARSED, "//h1[@class='story-header']",xmlValue)
+  date=as.character(xpathSApply(PARSED, "//meta[@name='OriginalPublicationDate']/@content"))
+  if (is.null(date))    date <- NA
+  if (is.null(title))    title <- NA
+  return(c(title,date))
+}
+```
+
+
+
+Rest of the class is yours! 
+=======================
+
+The following slides have bits of code to get you started with APIs
+
+Select from four tasks:
+
+1) More social stats
+
+2) Use Yandex maps instead of Google
+
+3) YouTube data
+
+4) See what the other APIs can do, or find your own.
+
+
+Social APIs
+===============
+type:sq
+Share counts. These work similarly to Facebook API. 
+
+Twitter undocumented API:
+
+```{r}
+url="http://www.theguardian.com/uk-news/2014/mar/10/rise-zero-hours-contracts"
+target=paste0("http://urls.api.twitter.com/1/urls/count.json?url=",url)
+  rd <- readLines(target, warn="F") 
+  dat <- fromJSON(rd)
+  dat
+  shares <- dat$count
+```
+
+
+=================
+type: section
+Using official documentation, get the analogous stats from Linkedin and StumbleUpon
+
+Linkedin:
+https://developer.linkedin.com/retrieving-share-counts-custom-buttons
+
+StumbleUpon:
+http://help.stumbleupon.com/customer/portal/articles/665227-badges
+
+
+
+Map making 2
+==================
+type: section
+type:sq
+Yandex maps have a very similar syntax to Google maps. 
+
+To get comfortable scripting with APIs, replicate the code above (slides 13:20) for Yandex maps, based on information here:
+
+http://api.yandex.com/maps/doc/staticapi/1.x/dg/concepts/input_params.xml
+
+YouTube API
+===============
+type:sq
+
+https://developers.google.com/youtube/2.0/developers_guide_protocol_audience
+
+V2 deprecated. (what does this tell us about using APIs?)
+
+To get you started:
+
+Video stats (id = video ID, e.g. "Ya2elsR5s5s"):
+url=paste0("https://gdata.youtube.com/feeds/api/videos/",id,"?v=2&alt=json")
+
+Comments (id = video ID, e.g. "Ya2elsR5s5s"):
+url=paste0("http://gdata.youtube.com/feeds/api/videos/",id,"/comments?v=2&alt=json")
+
+Search (ukrainian protests):
+url="https://gdata.youtube.com/feeds/api/videos?q=ukrainian+protests&alt=json"
+
+Figure out what the JSON structure is, and how to extract the data you need
+
+Google books
+============
+
+I have not used this one. But:
+
+Documentation: https://developers.google.com/books/docs/v1/getting_started
+
+Example query: https://www.googleapis.com/books/v1/volumes?q=harry+potter&callback=handleResponse
+
+
+
+Song lyrics
+=========
+
+- Documentation http://api.wikia.com/wiki/LyricWiki_API
+- Example http://lyrics.wikia.com/api.php?artist=Smashing Pumpkins&song=1979&fmt=json
+
+
+Cricket score
+=================
+
+- http://cricscore-api.appspot.com/
+- http://cricscore-api.appspot.com/csa#current matches
+- http://cricscore-api.appspot.com/csa?id=MATCH_ID_HERE
+
+
+
+Some APIs require setup:
+==============
+Rotten tomatoes
+http://developer.rottentomatoes.com/docs
+
+Bing translator
+http://blogs.msdn.com/b/translation/p/gettingstarted1.aspx
+
+Weather
+http://www.worldweatheronline.com/free-weather-feed.aspx
+https://developer.forecast.io/
+
+Last.fm
+http://www.last.fm/api   <br>Also reading: http://rcrastinate.blogspot.co.uk/2013/03/peace-through-music-country-clustering.html
+
+Flickr
+https://www.flickr.com/services/api/
+
+
+Find your own API
+========================
+
+http://www.programmableweb.com/apis/directory
+
+
+
+
+Social APIs, my solutions
+======================
+type: sq
+
+```{r}
+#Linkedin
+url="http://www.theguardian.com/uk-news/2014/mar/10/rise-zero-hours-contracts"
+target=paste0("http://www.linkedin.com/countserv/count/share?url=$",url,"&format=json")
+  rd <- readLines(target, warn="F") 
+  dat <- fromJSON(rd)
+
+#StumbleUpon
+url="http://www.theguardian.com/uk-news/2014/mar/10/rise-zero-hours-contracts"
+target=paste0("http://www.stumbleupon.com/services/1.01/badge.getinfo?url=",url)
+  rd <- readLines(target, warn="F") 
+  dat <- fromJSON(rd)
+
+```
+
+
+Map making 2: my approach
+====================
+type:sq1
+
+Geocoding
+```{r eval=F}
+query="cambridge university"
+target=paste0("http://geocode-maps.yandex.ru/1.x/?format=json&lang=en-BR&geocode=",query)
+  rd <- readLines(target, warn="F") 
+  dat <- fromJSON(rd)
+
+#Exctract address and location data
+address <- dat$response$GeoObjectCollection$featureMember[[1]]$
+  GeoObject$metaDataProperty$GeocoderMetaData$AddressDetails$Country$AddressLine
+pos <- dat$response$GeoObjectCollection$featureMember[[1]]$
+  GeoObject$Point
+require(stringr)
+temp <- unlist(str_split(pos," "))
+latitude=as.numeric(temp)[1]
+longitude=as.numeric(temp)[2]
+```
+
+Map making 2: my approach 2
+==================
+
+Download the map
+```{r}
+zoom=13
+lang="en-US"
+maptype="map" #pmap,map,sat,trf (traffic!) Note: if using sat, file is in JPG format, not PNG
+target <- paste0("http://static-maps.yandex.ru/1.x/?ll=",latitude,",",longitude,"&size=450,450&z=",zoom,"&l=map&lang=",lang,"&l=",maptype)
+download.file(target,"test.png", mode = "wb")
+```
+
+
+YouTube stats
+=================
+type:sq1
+
+Function to return stats about a single video
+```{r}
+getStats <- function(id){
+  url=paste0("https://gdata.youtube.com/feeds/api/videos/",id,"?v=2&alt=json")
+  raw.data <- readLines(url, warn="F") 
+  rd  <- fromJSON(raw.data)
+  dop  <- as.character(rd$entry$published)
+  term <- rd$entry$category[[2]]["term"]
+  label <- rd$entry$category[[2]]["label"]
+  title <- rd$entry$title
+  author <- rd$entry$author[[1]]$name
+  duration <- rd$entry$`media$group`$`media$content`[[1]]$duration
+  favs <- rd$entry$`yt$statistics`["favoriteCount"]
+  views <- rd$entry$`yt$statistics`["viewCount"]
+  dislikes <- rd$entry$`yt$rating`["numDislikes"]
+  likes <- rd$entry$`yt$rating`["numLikes"]
+  return(data.frame(id,dop,term,label,title,author,duration,favs,views,dislikes,likes))
+}
+
+```
+
+
+YouTube Comments
+===============
+type:sq1
+
+Function to return comments about a video
+
+```{r}
+getComments <- function(id){
+  url=paste0("http://gdata.youtube.com/feeds/api/videos/",id,"/comments?v=2&alt=json")
+  raw.data <- readLines(url, warn="F") 
+  rd  <- fromJSON(raw.data)
+  comments <- as.character(sapply(1:length(rd$feed$entry), function(x) (rd$feed$entry[[x]]$content)))
+  return(comments)
+}
+```
+
+
+What next
+===========
+
+Share your skills - not too many people in Cambridge do digital data collection
+
+Most online resources assume Python. Worth learning. Most knowledge applicable to R
+
+http://chimera.labs.oreilly.com/books/1234000001583
+
+Links in first week's 'reading' section
+
+Good luck!

@@ -1,0 +1,9 @@
+base
+bitops
+knitr
+lubridate
+plyr
+RCurl
+rjson
+stringr
+XML
