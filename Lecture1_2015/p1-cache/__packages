@@ -5,3 +5,5 @@ lubridate
 rjson
 stringr
 jsonlite
+bitops
+RCurl

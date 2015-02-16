@@ -290,7 +290,11 @@ type:alert
 Remember how to read in files using R? Load in some text from the web:
 <small>
 ```{r}
-text=readLines('https://github.com/fredheir/WebScraping/blob/gh-pages/Lecture1_2015/text.txt')
+require(RCurl)
+
+download.file('https://raw.githubusercontent.com/fredheir/WebScraping/gh-pages/Lecture1_2015/text.txt',destfile='tmp.txt',method='curl')
+text=readLines('tmp.txt')
+
 ```
 - What is this? Explore the file. 
 - How many lines does the file have?
