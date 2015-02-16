@@ -3,3 +3,5 @@ ggplot2
 knitr
 lubridate
 rjson
+stringr
+jsonlite

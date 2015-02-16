@@ -2,13 +2,15 @@
 opts_chunk$set(cache=TRUE)
 ```
 
-Web Scraping - getting started
+Digital Data Collection - getting started
 ========================================================
 width: 1200
-author: Rolf Fredheim and Aiora Zabala
+author: Rolf Fredheim and Yulia Shenderovich
 date: University of Cambridge
 font-family: 'Rockwell'
-18/02/2014
+css:style.css
+
+17/02/2014
 
 Logging on
 ========================================================
@@ -24,25 +26,27 @@ Download these slides
 ========================================================
 type:sq2
 
-download.file('https://raw.github.com/fredheir/WebScraping/master/Lecture1/p1.Rpres',
-destfile='p1.Rpres')
+Follow link from course description on the SSRMC pages or go directly to 
+http://fredheir.github.io/WebScraping/
 
-OR: download.file('http://goo.gl/ulTloi', destfile='p1.Rpres')
+Download the R file to your computer
 
-OLD RSTUDIO:
-markdown:
+Optionally download the slides
 
-download.file('https://raw.github.com/fredheir/WebScraping/master/Lecture1/p1.Rpres',
-destfile='p1.Rmd')
+And again, optionally open the html slides in your browser
 
-slides in browser. Open:
-http://fredheir.github.io/WebScraping/Lecture1/p1.html
 
-Open the file **p1.Rpres** or **p1.Rmd** in RStudio, and press **preview** to view the slides
 
-<img src=https://github.com/fredheir/WebScraping/blob/master/Lecture1/i1.jpg?raw=true" style="width: 50%;"/>
+Install the following packages:
+===============
+knitr
+ggplot2
+lubridate
+plyr
+jsonlite
+stringr
 
-for more info about editing these slides, go [here](http://www.rstudio.com/ide/docs/presentations/overview)
+press **preview** to view the slides in RStudio
 
 
 Who is this course for
@@ -107,22 +111,14 @@ Again, from [Wikipedia](http://en.wikipedia.org/wiki/Web_scraping)
 > ... Web scraping focuses on the **transformation of unstructured data** on the web, typically in HTML format, into structured data that can be stored and analyzed in **a central local database or spreadsheet**. 
 
 
-What will we do today?
-==============
-```{r eval=F}
-a<-fetchData(1,c("Web_scraping","Data_mining"))
-ggplot(a,aes(date,rd.views,colour=target))+geom_line()
-```
-
-<img src="https://github.com/fredheir/WebScraping/blob/master/Lecture1/p1.png?raw=true" alt="Drawing" />
 
 What will we learn? 
 ====================
-1) manipulating URLs
+1) working with text in R
 
-2) downloading stuff from within R
+2) Connecting R to the outside world
 
-3) automate collection through loops and functions
+3) Downloading from within R
 
 
 
@@ -139,7 +135,7 @@ Tabulate this data
 require (ggplot2)
 clubs <- c("Tottenham","Arsenal","Liverpool",
            "Everton","ManU","ManC","Chelsea")
-nPages <- c(23.3,68.4,78.9,35.5,102,90.5,110)
+nPages <- c(67,113,54,16,108,93,64)
 df <- data.frame(clubs,nPages)
 df
 ```
@@ -159,6 +155,10 @@ Health and Safety
 Programming with Humanists: Reflections on Raising an Army of Hacker-Scholars in the Digital Humanities
 http://openbookpublishers.com/htmlreader/DHP/chap09.html#ch09
 
+
+Why might the Google example not be a good one?
+=====================
+
 Bandwidth
 =================
 <p align="center"><img src="http://www.cisco.com/web/about/ac123/ac147/images/ipj/ipj_7-4/dos_figure_4.gif" alt="Drawing" /></p>
@@ -176,9 +176,289 @@ we will:
 Practice
 ==============
 type:section
-- **The URL**
+- **String manipulation**
 - Loops
 - Scraping
+
+The JSON data
+==================
+
+http://stats.grok.se/json/en/201401/web_scraping
+
+{"daily_views": {"2013-01-12": 542, "2013-01-13": 593, "2013-01-10": 941, "2013-01-11": 798, "2013-01-16": 1119, "2013-01-17": 1124, "2013-01-14": 908, "2013-01-15": 1040, "2013-01-30": 1367, "2013-01-18": 1027, "2013-01-19": 743, "2013-01-31": 1151, "2013-01-29": 1210, "2013-01-28": 1130, "2013-01-23": 1275, "2013-01-22": 1131, "2013-01-21": 1008, "2013-01-20": 707, "2013-01-27": 789, "2013-01-26": 747, "2013-01-25": 1073, "2013-01-24": 1204, "2013-01-01": 379, "2013-01-03": 851, "2013-01-02": 807, "2013-01-05": 511, "2013-01-04": 818, "2013-01-07": 745, "2013-01-06": 469, "2013-01-09": 946, "2013-01-08": 912}, "project": "en", "month": "201301", "rank": -1, "title": "web_scraping"}
+
+
+
+
+String manipulation in R
+==============
+type:sq2
+
+Top string manipulation functions:
+<small>
+- tolower (also  toupper, capitalize)
+- grep
+- gsub
+- str_split (library: stringr)
+-substring
+- paste and paste0
+- nchar
+- str_trim (library: stringr)
+</small>
+
+Reading: 
+<small>
+- http://en.wikibooks.org/wiki/R_Programming/Text_Processing
+- http://chemicalstatistician.wordpress.com/2014/02/27/useful-functions-in-r-for-manipulating-text-data/
+- http://gastonsanchez.com/blog/resources/how-to/2013/09/22/Handling-and-Processing-Strings-in-R.html
+</small>
+
+
+Changing the case
+================
+incremental:true
+We can apply them to individual strings, or to vectors:
+```{r}
+tolower('ROLF')
+states = rownames(USArrests)
+tolower(states[0:4])
+toupper(states[0:4])
+```
+
+Number of characters
+================
+incremental:true
+We can also use this to make selections:
+```{r}
+nchar(states)
+states[nchar(states)==5]
+
+```
+
+
+Cutting strings
+============
+We can use fixed positions, e.g. to get first character
+`r substring('mytextishere',1,1)`
+
+or to get a fixed part of the string:
+`r substring('mytextishere',3,6)`
+
+Can you see how this function works? If not use ?substring
+
+
+str_split
+==============
+incremental:true
+type:sq
+
+- Manipulating URLs
+- Editing time stamps, etc
+
+- syntax: str_split(inputString,pattern)
+returns a list
+```{r}
+require(stringr)
+link="http://stats.grok.se/json/en/201401/web_scraping"
+str_split(link,'/')
+unlist(str_split(link,"/"))
+```
+
+Cleaning data
+============
+type:sq1
+incremental:true
+
+- nchar
+- tolower (also  toupper)
+- str_trim (library: stringr)
+```{r}
+annoyingString <- "\n    something HERE  \t\t\t"
+```
+***
+```{r}
+nchar(annoyingString)
+str_trim(annoyingString)
+tolower(str_trim(annoyingString))
+nchar(str_trim(annoyingString))
+```
+
+
+Structured practice
+===========
+type:alert
+Remember how to read in files using R? Load in some text from the web:
+<small>
+```{r}
+text=readLines('https://github.com/fredheir/WebScraping/blob/gh-pages/Lecture1_2015/text.txt')
+```
+- What is this? Explore the file. 
+- How many lines does the file have?
+- print only the seventh line. Use **str_split()** to break it up into individual words
+- How many words are there? use **length()** to count the number of words. 
+- Are any words used more than once? Use table to find out!
+- Can you sort the results? 
+- What are the 10 most common words?
+- use nchar to find the length of the ten most common words? Tip: use **names()**
+- What about for the whole text?
+</small>
+
+Walkthrough
+=======
+type:prompt
+incremental:true
+
+```{r eval=F}
+length(text)
+text[7]
+length(unlist(str_split(text[7],' ')))
+table(length(unlist(str_split(text[7],' '))))
+words=sort(table(length(unlist(str_split(text[7],' ')))))
+tail(words)
+nchar(names(tail(words)))
+words=sort(table(length(unlist(str_split(text,' ')))))
+tail(words)
+```
+
+What do they do - grep
+=====================
+type:sq1
+incremental:true
+Grep allows regular expressions in R
+
+E.g. 
+```{r}
+grep("Ohio",states)
+
+grep("y",states)
+
+#To make a selection
+states[grep("y",states)]
+
+```
+
+Grep 2
+============
+type:sq
+
+useful options: 
+- invert=TRUE : get all non-matches
+- ignore.case=TRUE : what it says on the box
+- value = TRUE : return values rather than positions
+
+Structured practice2
+===========
+type:alert
+Use Grep to find all the statements including the words:
+- 'London'
+- 'conspiracy'
+- 'amendment'
+
+Each of the statements in our parliamentary debate begin with a paragraph sign(§)
+- Use grep to select only these lines!
+- How many separate statements are there? 
+
+
+
+Walkthrough2
+=======
+incremental:true
+type:prompt
+```{r eval=F}
+grep('London',text)
+grep('conspiracy',text)
+grep('amendment',text)
+grep('§',text)
+length(grep('§',text))
+```
+
+Regex
+========
+type:sq1
+incremental:true
+
+- ?regex 
+- http://www.rexegg.com/regex-quickstart.html
+
+Can match beginning or end of word, e.g.:
+```{r eval =F}
+stalinwords=c("stalin","stalingrad","Stalinism","destalinisation")
+grep("stalin",stalinwords,value=T)
+
+#Capitalisation
+grep("stalin",stalinwords,value=T)
+grep("[Ss]talin",stalinwords,value=T)
+
+#Wildcards
+grep("s*grad",stalinwords,value=T)
+
+#beginning and end of word
+grep('\\<d',stalinwords,value=T)
+grep('d\\>',stalinwords,value=T)
+```
+
+Before running these on your computer, can you figure out what they will do?
+
+Structured practice 3
+===========
+type:alert
+Use grep to check whether you missed some hits for above due to capitalisation (London, conspiracy, amendment)
+
+Use the caret(^ ) character to match the start of a line. How many lines start with the word 'Amendment'?
+
+Use the dollar($) sign to match the end of a line. How many lines end with a question mark?
+
+
+Walkthrough3
+=======
+type:prompt
+incremental:true
+```{r}
+grep('[Aa]mendment',text)
+grep('^[Aa]mendment',text)
+grep('\\?$',text)
+```
+
+
+What do they do: gsub
+=====================
+incremental:true
+```{r}
+author <- "By Rolf Fredheim"
+gsub("By ","",author)
+gsub("Rolf Fredheim","Tom",author)
+```
+
+Gsub can also use regex
+
+
+
+
+Outline
+========================================================
+type:section
+
+Theory
+
+**Practice**
+
+
+
+Questions
+===================
+type:section
+1) how do we read the data from this page
+http://stats.grok.se/json/en/201401/web_scraping
+
+2) how do we generate a list of links, say for the whole of 2013?
+
+Practice
+==============
+type:section
+
+- String manipulation
+- **Scraping**
+- Loops
 
 
 The URL
@@ -204,43 +484,11 @@ http://stats.grok.se/en/201401/data_scraping
 
 'this page is in json format'
 
-The JSON data
-==================
-
-http://stats.grok.se/json/en/201401/web_scraping
-
-{"daily_views": {"2013-01-12": 542, "2013-01-13": 593, "2013-01-10": 941, "2013-01-11": 798, "2013-01-16": 1119, "2013-01-17": 1124, "2013-01-14": 908, "2013-01-15": 1040, "2013-01-30": 1367, "2013-01-18": 1027, "2013-01-19": 743, "2013-01-31": 1151, "2013-01-29": 1210, "2013-01-28": 1130, "2013-01-23": 1275, "2013-01-22": 1131, "2013-01-21": 1008, "2013-01-20": 707, "2013-01-27": 789, "2013-01-26": 747, "2013-01-25": 1073, "2013-01-24": 1204, "2013-01-01": 379, "2013-01-03": 851, "2013-01-02": 807, "2013-01-05": 511, "2013-01-04": 818, "2013-01-07": 745, "2013-01-06": 469, "2013-01-09": 946, "2013-01-08": 912}, "project": "en", "month": "201301", "rank": -1, "title": "web_scraping"}
-
-
-
-Outline
-========================================================
-type:section
-
-Theory
-
-**Practice**
-
-
-
-Questions
-===================
-type:section
-1) how do we read the data from this page
-
-2) how do we generate a list of links, say for the period 2012-2013?
-
-Practice
-==============
-type:section
-
-- The URL
-- **Scraping**
-- Loops
 
 
 Paste
 ==================
+incremental:true
 Check out ?paste if you are unsure about this 
 
 Bonus: check out ?paste0
@@ -253,10 +501,17 @@ paste("url",var,sep=" ")
 
 Paste2
 ==================
+incremental:true
 ```{r}
 var=123
 paste("url",rep(var,3),sep="_")
-paste(rep("url",3),var,sep="_")
+```
+
+Paste3
+======
+Can you figure out what these will print?
+```{r eval=F}
+paste("url",1:3,var,sep="_")
 var=c(123,421)
 paste(var,collapse="_")
 ```
@@ -264,6 +519,7 @@ paste(var,collapse="_")
 With a URL
 ===========================
 type:sq
+incremental:true
 ```{r}
 var=201401
 paste("http://stats.grok.se/json/en/",var,"/web_scraping")
@@ -272,7 +528,8 @@ paste("http://stats.grok.se/json/en/",var,"/web_scraping",sep="")
 
 Task using 'paste'
 ==============
-type:sq
+type:alert
+<small>
 a="test"
 
 b="scrape"
@@ -285,22 +542,37 @@ merge variables a,b,c into a string, separated by an underscore ("_")
 merge variables a,b,c into a string without any separating character
 > "testscrape94"
 
-print the letter 'a' followed by the numbers 1:10, without a separating character
+print the letter 'a' followed by the numbers 1:10, without a separating character 
 > "a1"  "a2"  "a3"  "a4"  "a5"  "a6"  "a7"  "a8"  "a9"  "a10"
+</small>
 
+Walkthrough
+===========
+type:prompt
+```{r eval=F}
+a="test"
+b="scrape"
+c=94
 
+paste(a,b,c,sep='_')
+paste(a,b,c,sep='')
+#OR:
+paste0(a,b,c)
+paste('a',1:10,sep='')
+```
 
 Testing a URL is correct in R
 ==============
+type:sq1
+
 Run this in your terminal:
 
+```{r eval=F}
 var=201401
-
 url=paste("http://stats.grok.se/json/en/",var,"/web_scraping",sep="")
-
 url
-
 browseURL(url)
+```
 
 Fetching data
 ==================
@@ -315,8 +587,7 @@ raw.data
 Fetching data2
 ==================
 ```{r}
-#install.packages("rjson")
-require(rjson)
+require(jsonlite)
 rd  <- fromJSON(raw.data)
 rd
 ```
@@ -324,7 +595,7 @@ rd
 Fetching data3
 ==================
 ```{r}
-rd.views <- rd$daily_views 
+rd.views <- unlist(rd$daily_views)
 rd.views
 ```
 
@@ -338,10 +609,27 @@ df
 
 Put it together
 ===================
-```{r}
+type:sq1
+```{r eval=F}
+var=201403
+
+url=paste("http://stats.grok.se/json/en/",var,"/web_scraping",sep="")
 rd <- fromJSON(readLines(url, warn="F"))
 rd.views <- rd$daily_views 
 df <- as.data.frame(unlist(rd.views))
+```
+
+Can we turn this into a function? 
+=========================
+type:alert
+Select the four lines in the previous slide, go to 'code' in RStudio, and click function
+
+This will allow you to make a function, taking one input, 'var'
+
+In future you can then run this as follows:
+
+```{r eval=F} 
+df=myfunction(var) 
 ```
 
 Plot it
@@ -360,54 +648,49 @@ ggplot(df,aes(date,views))+
 
 Tasks
 ====================
-type:section
-Plot Wikipedia page views in February 2014 for the Sochi games 
+type:alert
+Plot Wikipedia page views for February 2015. How do these compare with the numbers for 2014?
 
-How does this compare to the number of views on the Russian language wikipedia page?
+
+What about some other event? Modify the code below to checkout stats for something else?  
+paste("http://stats.grok.se/json/en/",var,"/web_scraping",sep="")
+
+Now try changing the language of the page ('en' above). How about Russian, or German? 
 
 Moving on
 =========================
-If you are comfortable with loops and functions, go ahead and write a great application. 
-
-The rest of us are going to learn about loops
+Now we will learn about loops
 
 
 Practice
 ==============
 type:section
-- The URL
+- String manipulation
 - Scraping
 - **Loops**
 
 
-Briefly about functions
-===============
-type:sq
+Idea of a loop
+========
+type:sq1
+Purpose is to reuse code by using one or more variables. Consider:
 ```{r}
-plusOne <- function(x){ 
-		return(x+1)			
-	}
+name='Rolf Fredheim'
+name='Yulia Shenderovich'
+name='David Cameron'
+firstsecond=(str_split(name, ' ')[[1]])
+ndiff=nchar(firstsecond[2])-nchar(firstsecond[1])
+print (paste0(name,"'s surname is ",ndiff," characters longer than their firstname"))
 
-plusOne2 <- function(num){ 
-		return(num+1)			
-	}
+
 ```
 
+Simple loops
+=============
 <small> 
 - Curly brackets {} include the code to be executed
 - Normal brackets () contain a list of variables</small>
 
-****
-```{r}
-	plusOne(8)
-	plusOne2(10)
-  plusOne2(num=5)
-  #plusOne2(wrongVar=2)
-```
-
-
-Simple loops
-=============
 ```{r}
 for (number in 1:5){
 	print (number)
@@ -417,66 +700,22 @@ for (number in 1:5){
 Looping over functions
 ========================
 type:sq
+incremental:true
+
 ```{r}
-a <- c(1,2,3,4,5)
-for (value in a){
+states_first=head(states)
+for (state in states_first){
 	print (
-		plusOne(value)
+		tolower(state)
+	)
+}
+
+for (state in states_first){
+  print (
+		substring(state,1,4)
 	)
 }
 ```
-***
-```{r}
-listOfNumbers <- c(1,2,3,4,5)
-for (number in listOfNumbers){
-	print (
-		number+1
-	)
-}
-```
-
-More loops
-========================
-type:sq
-```{r}
-a <- c(1,2,3,4,5)
-a[1] #The first number in the vector
-a[4] #The fourth number in the vector
-```
-***
-```{r}
-for (i in 1:length(a)){
-	print (
-		plusOne(a[i])
-	)
-}
-```
-
-
-What are we looping over
-=================
-type:sq
-In each case we are performing an operation on the vector in brackets. 
-
-See:
-```{r}
-#for (i in 1:length(a))
-print(1:length(a))
-#for (i in length(a))
-print (length(a))
-#for (i in a)
-print (a)
-```
-
-Vectors
-=============
-```{r}
-a <- c(1,2,3,4,5) #Least flexible, fastest
-a+1
-plusOne(a) #Quite flexible
-sapply(a,plusOne) #Can be used in all sorts of situations, slow - similar to a loop, better if you are colleting an output
-```
-
 
 
 Urls again
@@ -534,48 +773,30 @@ print (dates)
 ```
 !! To do this with a **data.frame**, use **rbind()**
 
-Add another variable
-=========================
-type:sq
-We might want years to be a variable
-Shows two loops:
-```{r}
-for (year in 2012:2013){
-	for (month in 1:9){
-		print(paste(year,0,month,sep=""))
-	}
-	for (month in 10:12){
-		print(paste(year,month,sep=""))
-	}
-}
-```
-
 Putting it together
 ============================
 type:sq
 ```{r}
-for (year in 2012:2013){
   for (month in 1:9){
-		print(paste("http://stats.grok.se/json/en/",year,0,month,"/web_scraping",sep=""))
+		print(paste("http://stats.grok.se/json/en/2013",0,month,"/web_scraping",sep=""))
 	}
 
 	for (month in 10:12){
-		print(paste("http://stats.grok.se/json/en/",year,month,"/web_scraping",sep=""))
+		print(paste("http://stats.grok.se/json/en/2013",month,"/web_scraping",sep=""))
 	}
-}
 ```
 
 
 Tasks about Loops
 ==================
-type: section
+type:alert
 - Write a loop that prints every number between 1 and 1000
 - Write a loop that adds up all the numbers between 1 and 1000
 - Write a function that takes an input number and returns this number divided by two
 - Write a function that returns the value 99 no matter what the input
 - Write a function that takes two variables, and returns the sum of these variables
 
-Advanced tasks
+If you want to take this further....
 =========================
 type: section
 - Can you make an application which takes a Wikipedia page (e.g. Web_scraping) and returns a plot for the month 201312
@@ -584,21 +805,6 @@ type: section
 - Can you write the application so that it takes a custom data range?
 - If you have time, keep expanding functionality: multiple pages, multiple languages. you could also make it interactive using [Shiny](http://www.rstudio.com/shiny/)
 
-
-Getting started with functions
-=============================
-```{r}
-getData <- function(url){
-	raw.data <- readLines(url, warn="F") 
-	rd  <- fromJSON(raw.data)
-	rd.views <- rd$daily_views 
-	rd.views <- unlist(rd.views)
-	rd <- as.data.frame(rd.views)
-  rd$date <- rownames(rd)
-  rownames(rd) <- NULL
-	return(rd)
-}
-```
 
 Reading
 =============
@@ -610,69 +816,3 @@ http://www.essex.ac.uk/ldev/documents/going_digital/scraping_book.pdf
 https://software.rc.fas.harvard.edu/training/scraping2/latest/index.psp#(1) 
 
 
-
-<!-- CSS formatting used in these slides -->
-
-<style>.s1 .reveal .state-background {
-  background: #E0E0FF;
-} 
-
-.sq1 .reveal section code {
-  font-size:145%;
-}
-.sq1 .reveal section p {
-  font-size:100%;
-}
-
-
-.sq .reveal section code {
-	font-size:125%;
-}
-.sq .reveal section p {
-  font-size:85%;
-}
-
-
-.sq2 .reveal section code {
-	font-size:100%;
-}
-.sq2 .reveal section p {
-  font-size:70%;
-}
-.reveal blockquote {
-  display: block;
-  position: relative;
-  width: 100%;
-  margin: 5px auto;
-  padding: 5px;
-
-  font-style: normal;
-  background: #C6D7DC;
-  border: 1px solid #C6D7DC;
-  box-shadow: none;
-}
-
-.reveal pre {   
-  margin-top: 0;
-  max-width: 100%;
-  width: 100%;
-  border: 1px solid #ccc;
-  white-space: pre-wrap;
-  margin-bottom: 1em; 
-}
-
-.reveal pre code {
-/*  display: block; padding: 0.5em;
-*/  font-size: 1.6em;
-  line-height: 1.1em;
-  background-color: white;
-  overflow: visible;
-  max-height: none;
-  word-wrap: normal;
-}
-
-.reveal section centered {
-	text-align: center;
-   border: none;
-}
-</style>
