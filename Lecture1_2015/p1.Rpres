@@ -534,11 +534,9 @@ Task using 'paste'
 ==============
 type:alert
 <small>
-a="test"
-
-b="scrape"
-
-c=94
+- a="test"
+- b="scrape"
+- c=94
 
 merge variables a,b,c into a string, separated by an underscore ("_")
 > "test_scrape_94"
@@ -703,7 +701,7 @@ for (number in 1:5){
 
 Looping over functions
 ========================
-type:sq
+type:sq2
 incremental:true
 
 ```{r}

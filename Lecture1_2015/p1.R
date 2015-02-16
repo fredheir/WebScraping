@@ -47,8 +47,11 @@ nchar(str_trim(annoyingString))
 
 
 # Structured practice -------------------------------
-text=readLines('~/teaching/WebScraping/Lecture1_2015/text.txt')
-#text=readLines('https://github.com/fredheir/WebScraping/blob/gh-pages/Lecture1_2015/text.txt')
+require(RCurl)
+
+download.file('https://raw.githubusercontent.com/fredheir/WebScraping/gh-pages/Lecture1_2015/text.txt',destfile='tmp.txt',method='curl')
+text=readLines('tmp.txt')
+
 
 
 # Walkthrough ---------------------------------------
