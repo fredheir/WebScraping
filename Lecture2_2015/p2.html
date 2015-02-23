@@ -560,6 +560,71 @@ body {
 }
 
 
+<!-- CSS formatting used in these slides -->
+
+<style>.s1 .reveal .state-background {
+  background: #E0E0FF;
+} 
+
+.sq1 .reveal section code {
+  font-size:145%;
+}
+.sq1 .reveal section p {
+  font-size:100%;
+}
+
+
+.sq .reveal section code {
+	font-size:125%;
+}
+.sq .reveal section p {
+  font-size:85%;
+}
+
+
+.sq2 .reveal section code {
+	font-size:100%;
+}
+.sq2 .reveal section p {
+  font-size:70%;
+}
+.reveal blockquote {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 5px auto;
+  padding: 5px;
+
+  font-style: normal;
+  background: #C6D7DC;
+  border: 1px solid #C6D7DC;
+  box-shadow: none;
+}
+
+.reveal pre {   
+  margin-top: 0;
+  max-width: 100%;
+  width: 100%;
+  border: 1px solid #ccc;
+  white-space: pre-wrap;
+  margin-bottom: 1em; 
+}
+
+.reveal pre code {
+/*  display: block; padding: 0.5em;
+*/  font-size: 1.6em;
+  line-height: 1.1em;
+  background-color: white;
+  overflow: visible;
+  max-height: none;
+  word-wrap: normal;
+}
+
+.reveal section centered {
+	text-align: center;
+   border: none;
+}
+</style>
 
   </style>
   
@@ -1031,7 +1096,7 @@ target_urls
 </code></pre>
 
 <pre><code class="r">for (i in target_urls){
-    getData(i)
+    dat = getData(i)
 }
 </code></pre>
 
@@ -1039,7 +1104,33 @@ target_urls
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>What about storing the data?</h3>
+<h3>Loops: storing the data?</h3>
+<div class="slideContent" >
+<pre><code class="r">hold=NULL
+for (i in 1:5){
+  print(paste0(&#39;this is loop number &#39;,i))
+  hold=c(hold,i)
+  print(hold)
+}
+</code></pre>
+
+<pre><code>[1] &quot;this is loop number 1&quot;
+[1] 1
+[1] &quot;this is loop number 2&quot;
+[1] 1 2
+[1] &quot;this is loop number 3&quot;
+[1] 1 2 3
+[1] &quot;this is loop number 4&quot;
+[1] 1 2 3 4
+[1] &quot;this is loop number 5&quot;
+[1] 1 2 3 4 5
+</code></pre>
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
+<h3>Solution</h3>
 <div class="slideContent" >
 <p>use rbind()
 create empty vector, and add data to the end of it:</p>
@@ -1487,6 +1578,29 @@ results=do.call(rbind,dat)
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
+<h3>Walkthrough</h3>
+<div class="slideContent" >
+<pre><code class="r">targets=c(&quot;Barack_Obama&quot;,&quot;United_States_elections,_2014&quot;)
+target_urls=paste(&quot;http://stats.grok.se/json/en/201401/&quot;,targets,sep=&quot;&quot;)
+dat=lapply(target_urls,getData)
+results=do.call(rbind,dat)
+
+#find number of rows for each: 
+t=nrow(results)/length(targets)
+t
+</code></pre>
+
+<pre><code>[1] 31
+</code></pre>
+
+<pre><code class="r">#apply ids:
+results$id=rep(targets,each=t)
+</code></pre>
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
 <h3>Moving on</h3>
 <div class="slideContent" >
 <p>Comments to newspaper articles</p>
@@ -1665,9 +1779,11 @@ head(dat)
 <div class="slideContent" >
 <p>url=&#39;<a href="http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&amp;order=desc">http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&amp;order=desc</a>&#39;</p>
 
-<p>id=2643770
-max=10
-order=desc</p>
+<ul>
+<li>id=2643770</li>
+<li>max=10</li>
+<li>order=desc</li>
+</ul>
 
 <p>Try repeating the process to download 100 comments</p>
 
@@ -1758,15 +1874,18 @@ df=data.frame(rd)
 <div class="slideContent" >
 <p>1) Download the number of Twitter shares for each of these these pages:</p>
 
-<p><a href="http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html">http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html</a>
-<a href="http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html">http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html</a></p>
+<ul>
+<li><a href="http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html">http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html</a></li>
+<li><a href="http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html">http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html</a></li>
+</ul>
 
-<p>2) Combine these responses into a single data.frame</p>
+<p>2) Use rbind to combine these responses into a single data.frame</p>
 
-<p>3) write a function that takes an input url to scrape Twitter
-4) Write a function that takes an input url to scrape both Twitter and Facebook</p>
+<p>3) write a function that takes an input url to scrape Twitter</p>
 
-<p>5) use lapply and do.call to make a scraper</p>
+<p>4) Write a function that takes an input url to scrape both Twitter and Facebook (hard!)</p>
+
+<p>5) use lapply and do.call to make a scraper (copy code from slide 14 - parsimonious approach - above)</p>
 
 </div>
 
@@ -1791,7 +1910,7 @@ tw2=data.frame(rd)
 </div>
 
 </section>
-<section data-state="sq1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq2" data-transition="linear" data-transition-speed="default">
 <h3>Walkthrough 2 and 3</h3>
 <div class="slideContent" >
 <pre><code class="r">#2)
@@ -1809,7 +1928,7 @@ getTweetCount(url2)
 </code></pre>
 
 <pre><code>  count
-1   128
+1   161
                                                                                url
 1 http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html/
 </code></pre>
@@ -1841,7 +1960,7 @@ getBoth &lt;-function(url){
 </div>
 
 </section>
-<section data-state="sq1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq2" data-transition="linear" data-transition-speed="default">
 <h3>Walkthrough 5</h3>
 <div class="slideContent" >
 <pre><code class="r">#5)
@@ -1859,7 +1978,7 @@ do.call(rbind,dat)
 2                                                          http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html
   fb_shares tw_shares
 1       697        39
-2      3067       128
+2      3956       161
 </code></pre>
 
 </div>
@@ -1899,6 +2018,7 @@ head(rd$data)
 api=&#39;http://juicer.herokuapp.com/api/article?url=&#39;
 
 target=paste(api,url,sep=&quot;&quot;)
+target
 
 raw.data &lt;- readLines(target, warn=&quot;F&quot;) 
 rd  &lt;- fromJSON(raw.data)
@@ -1937,6 +2057,12 @@ ent[ent$type==&#39;Location&#39;,]
 <pre><code>NULL
 </code></pre>
 
+<pre><code class="r">ent[ent$type==&#39;Person&#39;,]
+</code></pre>
+
+<pre><code>NULL
+</code></pre>
+
 </div>
 
 </section>
@@ -1962,6 +2088,72 @@ ent[ent$type==&#39;Location&#39;,]
 
 <p><a href="http://fredheir.github.io/WebScraping/Lecture2_2015/extra.html">http://fredheir.github.io/WebScraping/Lecture2_2015/extra.html</a>
 <a href="http://fredheir.github.io/WebScraping/Lecture2_2015/extra.R">http://fredheir.github.io/WebScraping/Lecture2_2015/extra.R</a></p>
+
+<!-- CSS formatting used in these slides -->
+
+<style>.s1 .reveal .state-background {
+  background: #E0E0FF;
+} 
+
+.sq1 .reveal section code {
+  font-size:145%;
+}
+.sq1 .reveal section p {
+  font-size:100%;
+}
+
+
+.sq .reveal section code {
+  font-size:125%;
+}
+.sq .reveal section p {
+  font-size:85%;
+}
+
+
+.sq2 .reveal section code {
+    font-size:100%;
+}
+.sq2 .reveal section p {
+  font-size:70%;
+}
+.reveal blockquote {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 5px auto;
+  padding: 5px;
+
+  font-style: normal;
+  background: #C6D7DC;
+  border: 1px solid #C6D7DC;
+  box-shadow: none;
+}
+
+.reveal pre {   
+  margin-top: 0;
+  max-width: 100%;
+  width: 100%;
+  border: 1px solid #ccc;
+  white-space: pre-wrap;
+  margin-bottom: 1em; 
+}
+
+.reveal pre code {
+/*  display: block; padding: 0.5em;
+*/  font-size: 1.6em;
+  line-height: 1.1em;
+  background-color: white;
+  overflow: visible;
+  max-height: none;
+  word-wrap: normal;
+}
+
+.reveal section centered {
+    text-align: center;
+   border: none;
+}
+</style>
 
 </div>
 
