@@ -899,6 +899,13 @@ stringr</p>
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
+<h3>No class next week!!</h3>
+<div class="slideContent" >
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
 <h3>Recap</h3>
 <div class="slideContent" >
 <ul>
@@ -906,6 +913,36 @@ stringr</p>
 <li>Basics of text manipulation in R</li>
 <li>Simple scraping example</li>
 </ul>
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
+<h3>Today we will scrape</h3>
+<div class="slideContent" >
+<p>More JSON!</p>
+
+<ul>
+<li>social share stats</li>
+<li>comments</li>
+<li>newspaper articles</li>
+</ul>
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
+<h3>For that we will need</h3>
+<div class="slideContent" >
+<ul>
+<li>use paste to make urls</li>
+<li>jsonlite to convert json to lists and data.frames</li>
+<li>loops to iterate over urls</li>
+<li>functions to store code</li>
+<li>rbind, cbind, and c to collect data</li>
+</ul>
+
+<p>This might seem a lot. But very little changes, and it&#39;s a powerful toolkit</p>
 
 </div>
 
@@ -1928,7 +1965,7 @@ getTweetCount(url2)
 </code></pre>
 
 <pre><code>  count
-1   161
+1   163
                                                                                url
 1 http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html/
 </code></pre>
@@ -1978,7 +2015,7 @@ do.call(rbind,dat)
 2                                                          http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html
   fb_shares tw_shares
 1       697        39
-2      3956       161
+2      4020       163
 </code></pre>
 
 </div>
@@ -2003,7 +2040,7 @@ head(rd$data)
 <section data-transition="linear" data-transition-speed="default">
 <h3>Getting article content</h3>
 <div class="slideContent" >
-<p>Next week we will do scraping proper. But check out this awesome API:
+<p>In TWO WEEKS TIME (10 March) we will do scraping proper. But check out this awesome API:
 <a href="http://juicer.herokuapp.com/">http://juicer.herokuapp.com/</a></p>
 
 <p><a href="http://juicer.herokuapp.com/api/article?url=http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html">http://juicer.herokuapp.com/api/article?url=http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html</a></p>
@@ -2027,6 +2064,7 @@ dat=rd$article
 dat$entities &lt;-NULL
 
 dat &lt;-data.frame(dat)
+dat
 </code></pre>
 
 </div>
@@ -2082,12 +2120,28 @@ ent[ent$type==&#39;Location&#39;,]
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
+<h3>No class next week!!</h3>
+<div class="slideContent" >
+<p>So that&#39;s it for APIs and JSON
+But for those who are keen, more advanced stuff involving APIs and JSON sources (maps? YouTube?) can be found in last year&#39;s slides:</p>
+
+<ul>
+<li><a href="http://fredheir.github.io/WebScraping/Lecture3/p3.html">http://fredheir.github.io/WebScraping/Lecture3/p3.html</a></li>
+<li><a href="http://fredheir.github.io/WebScraping/Lecture4/p4.html">http://fredheir.github.io/WebScraping/Lecture4/p4.html</a></li>
+</ul>
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
 <h3>Too many loops, variables, and functions?</h3>
 <div class="slideContent" >
 <p>If this has all been a bit much, below is a link to some extra material on all things variables, functions and loops</p>
 
-<p><a href="http://fredheir.github.io/WebScraping/Lecture2_2015/extra.html">http://fredheir.github.io/WebScraping/Lecture2_2015/extra.html</a>
-<a href="http://fredheir.github.io/WebScraping/Lecture2_2015/extra.R">http://fredheir.github.io/WebScraping/Lecture2_2015/extra.R</a></p>
+<ul>
+<li><a href="http://fredheir.github.io/WebScraping/Lecture2_2015/extra.html">http://fredheir.github.io/WebScraping/Lecture2_2015/extra.html</a></li>
+<li><a href="http://fredheir.github.io/WebScraping/Lecture2_2015/extra.R">http://fredheir.github.io/WebScraping/Lecture2_2015/extra.R</a></li>
+</ul>
 
 <!-- CSS formatting used in these slides -->
 

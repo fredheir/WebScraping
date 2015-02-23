@@ -42,6 +42,9 @@ plyr
 jsonlite
 stringr
 
+No class next week!!
+=================
+
 
 Recap
 ================
@@ -50,7 +53,23 @@ Recap
 - Basics of text manipulation in R
 - Simple scraping example
 
+Today we will scrape
+================
+More JSON!
+- social share stats
+- comments
+- newspaper articles
 
+
+For that we will need
+================
+- use paste to make urls
+- jsonlite to convert json to lists and data.frames
+- loops to iterate over urls
+- functions to store code
+- rbind, cbind, and c to collect data
+
+This might seem a lot. But very little changes, and it's a powerful toolkit
 
 Load the packages
 =================
@@ -429,7 +448,7 @@ head(rd$data)
 
 Getting article content
 ===================
-Next week we will do scraping proper. But check out this awesome API:
+In TWO WEEKS TIME (10 March) we will do scraping proper. But check out this awesome API:
 http://juicer.herokuapp.com/
 
 http://juicer.herokuapp.com/api/article?url=http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html
@@ -451,6 +470,7 @@ dat=rd$article
 dat$entities <-NULL
 
 dat <-data.frame(dat)
+dat
 ```
 
 =====
@@ -480,6 +500,12 @@ given URLs of target pages, we can now:
 - apply the function to a list of targets
 
 
+No class next week!!
+=================
+So that's it for APIs and JSON
+But for those who are keen, more advanced stuff involving APIs and JSON sources (maps? YouTube?) can be found in last year's slides:
+- http://fredheir.github.io/WebScraping/Lecture3/p3.html
+- http://fredheir.github.io/WebScraping/Lecture4/p4.html
 
 Too many loops, variables, and functions?
 ============
@@ -487,8 +513,8 @@ Too many loops, variables, and functions?
 If this has all been a bit much, below is a link to some extra material on all things variables, functions and loops
 
 
-http://fredheir.github.io/WebScraping/Lecture2_2015/extra.html
-http://fredheir.github.io/WebScraping/Lecture2_2015/extra.R
+- http://fredheir.github.io/WebScraping/Lecture2_2015/extra.html
+- http://fredheir.github.io/WebScraping/Lecture2_2015/extra.R
 
 
 
