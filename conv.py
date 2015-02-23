@@ -77,11 +77,7 @@ class Slide:
 					running=True
 			if self.getTitle==True:
 				self.title=i
-				if not 'walkthrough' in i.lower():
-					break
-				else:
-					self.body=[]
-					break
+				break
 			if len(self.body)>0 and self.title=="":
 				if '===' in i:
 					self.getTitle=True
