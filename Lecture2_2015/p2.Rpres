@@ -1,0 +1,461 @@
+```{r setup, include=FALSE}
+```
+
+Digital Data Collection - Digging Deeper
+========================================================
+width: 1200
+author: Rolf Fredheim and Yulia Shenderovich
+date: University of Cambridge
+font-family: 'Rockwell'
+css:style.css
+
+24/02/2015
+
+Logging on
+========================================================
+type: s1
+
+Before you sit down:
+- Do you have your MCS password?
+- Do you have your Raven password?
+  - If you answered **'no'** to either then go to the University Computing Services (just outside the door) NOW!
+- Are you registered? If not, see me!
+
+
+
+Download these slides 
+========================================================
+
+Follow link from course description on the SSRMC pages or go directly to 
+http://fredheir.github.io/WebScraping/
+
+Download the R file to your computer
+
+
+
+Install the following packages:
+===============
+ggplot2
+lubridate
+plyr
+jsonlite
+stringr
+
+
+Recap
+================
+
+- Basic principles of data collection
+- Basics of text manipulation in R
+- Simple scraping example
+
+
+
+Load the packages
+=================
+```{r}
+require(ggplot2)
+require(lubridate)
+require(plyr)
+require(stringr)
+require(jsonlite)
+```
+
+Last week's example
+==================
+```{r echo}
+url  <- "http://stats.grok.se/json/en/201201/web_scraping"
+raw.data <- readLines(url, warn="F") 
+rd  <- fromJSON(raw.data)
+summary(rd)
+```
+
+
+Cont
+=====
+```{r}
+rd.views <- unlist(rd$daily_views )
+rd.views
+```
+
+What are the moving parts?
+=====================
+in url:
+- date
+- language
+- wiki page
+
+in response:
+- field name (daily_views)
+
+changing the date
+=================
+type:sq1
+```{r}
+target=201401
+url=paste("http://stats.grok.se/json/en/",
+          target,"/web_scraping",sep="")
+
+getData <- function(url){
+	raw.data <- readLines(url, warn="F") 
+	rd  <- fromJSON(raw.data)
+	rd.views <- unlist(rd$daily_views )
+	df=data.frame(rd.views)
+	return(df)
+}
+
+getData(url)
+```
+
+Create urls for January -June
+===========================
+type:sq
+- ':' operator
+- paste()
+
+```{r}
+5:10
+201401:201406
+targets=201401:201406
+target_urls=paste("http://stats.grok.se/json/en/",
+                  targets,"/web_scraping",sep="")
+target_urls
+```
+
+download them one by one
+==========================
+```{r}
+for (i in target_urls){
+	print (i)
+}
+
+for (i in target_urls){
+	getData(i)
+}
+```
+
+What about storing the data?
+========
+
+use rbind()
+create empty vector, and add data to the end of it:
+```{r}
+holder=NULL
+for (i in target_urls){
+	dat=getData(i)
+	holder=rbind(holder,dat)
+}
+
+holder
+```
+
+Is this efficient?
+=========
+Why (not)?
+
+Parsimonious approach
+========
+You could also use lapply here
+- lapply: 'applies' a function to each item in a vector. Returns a list. 
+- do.call: executes a function to each part of an item (here: the list)
+
+```{r}
+dat=lapply(target_urls,getData)
+results=do.call(rbind,dat)
+results
+```
+
+putting it together
+==================
+type:sq1
+```{r}
+targets=201401:201406
+targets=paste("http://stats.grok.se/json/en/",
+              201401:201406,"/web_scraping",sep="")
+dat=lapply(targets,getData)
+results=do.call(rbind,dat)
+```
+
+Task
+========
+Edit the code to download data for a different range of dates
+
+Edit the second line to download a vector of pages, rather than dates:
+
+```{r}
+targets=c("Barack_Obama","United_States_elections,_2014")
+```
+
+
+
+Moving on
+========
+Comments to newspaper articles
+
+http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html
+
+http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&order=desc
+
+Why can't we use our getData function?
+
+
+Download the page
+=======
+type:sq1
+```{r}
+url='http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&order=desc'
+raw.data <- readLines(url, warn="F") 
+rd  <- fromJSON(raw.data)
+
+str(rd)
+```
+
+Digging in
+========
+type:sq2
+find the list called 'payload'
+
+here we get stats about the number of comments
+rd$payload$total
+
+Dig furter into 
+'page'
+Here's a reasonably well formatted dataframe. We'll get rid of replies, though:
+
+```{r}
+dat=rd$payload$page
+dat$replies <- NULL
+head(dat)
+```
+
+Moveable parts
+===========
+
+url='http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&order=desc'
+
+id=2643770
+max=10
+order=desc
+
+Try repeating the process to download 100 comments
+
+
+APIs
+================
+type:sq1
+
+> When used in the context of web development, an API is typically defined as a set of Hypertext Transfer Protocol (HTTP) request messages, along with a definition of the structure of response messages, which is usually in an Extensible Markup Language (XML) or JavaScript Object Notation (JSON) format.
+
+> The practice of publishing APIs has allowed web communities to create an open architecture for sharing content and data between communities and applications. In this way, content that is created in one place can be dynamically posted and updated in multiple locations on the web
+
+-Wikipedia
+
+
+Social shares
+===============
+Most newssites will give stats about social shares. 
+E.g: http://www.bbc.co.uk/sport/0/football/31583092
+
+-> as of writing this up it had been shared 92 times
+
+Uses Twitter and Facebook apis
+Work with a 'get' request
+
+
+Types of request
+==============
+> GET requests a representation of the specified resource. Note that GET should not be used for operations that cause side-effects, such as using it for taking actions in web applications. One reason for this is that GET may be used arbitrarily by robots or crawlers, which should not need to consider the side effects that a request should cause.
+
+> POST submits data to be processed (e.g., from an HTML form) to the identified resource. The data is included in the body of the request. This may result in the creation of a new resource or the updates of existing resources or both.
+
+we use 'get' for scraping, 
+'post' is more complicated. Use it to navigate logins, popups, etc. 
+
+
+Constructing a query
+======
+
+You might have seen urls with these signs in them:
+- ?
+- &
+The question mark indicates the start of a query, while & is used to separate fields. 
+
+Get requests to social shares are very simple:
+
+http://graph.facebook.com/?id=http://www.bbc.co.uk/sport/0/football/31583092
+
+http://urls.api.twitter.com/1/urls/count.json?url=http://www.bbc.co.uk/sport/0/football/31583092
+
+
+Download these into R!
+=========
+
+Facebook
+```{r}
+url='http://graph.facebook.com/?id=http://www.bbc.co.uk/sport/0/football/31583092'
+raw.data <- readLines(url, warn="F") 
+rd  <- fromJSON(raw.data)
+df=data.frame(rd)
+```
+
+Repeat for Twitter
+
+
+Task
+=====
+1) Download the number of Twitter shares for each of these these pages:
+
+http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html
+http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html
+
+2) Combine these responses into a single data.frame
+
+3) write a function that takes an input url to scrape Twitter
+4) Write a function that takes an input url to scrape both Twitter and Facebook
+
+5) use lapply and do.call to make a scraper
+
+
+Walkthrough
+=========
+```{r}
+#1) 
+url='http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html'
+target=paste('http://urls.api.twitter.com/1/urls/count.json?url=',url,sep="")
+raw.data <- readLines(target, warn="F") 
+rd  <- fromJSON(raw.data)
+tw1=data.frame(rd)
+
+url2='http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html'
+target=paste('http://urls.api.twitter.com/1/urls/count.json?url=',url2,sep="")
+raw.data <- readLines(target, warn="F") 
+rd  <- fromJSON(raw.data)
+tw2=data.frame(rd)
+```
+
+Walkthrough 2 and 3
+=========
+type:sq1
+```{r}
+#2)
+df=rbind(tw1,tw2)
+
+#3)
+getTweetCount <-function(url){
+	target=paste('http://urls.api.twitter.com/1/urls/count.json?url=',url,sep="")
+	raw.data <- readLines(target, warn="F") 
+	rd  <- fromJSON(raw.data)
+	tw1=data.frame(rd)
+	return(tw1)
+}
+getTweetCount(url2)
+```
+
+Walkthrough 4
+==========
+```{r}
+#4)
+getBoth <-function(url){
+	target=paste('http://urls.api.twitter.com/1/urls/count.json?url=',url,sep="")
+	raw.data <- readLines(target, warn="F") 
+	rd  <- fromJSON(raw.data)
+	tw1=data.frame(rd)
+
+	target=paste('http://graph.facebook.com/?id=',url,sep='')
+	raw.data <- readLines(target, warn="F") 
+	rd  <- fromJSON(raw.data)
+	fb1=data.frame(rd)
+  
+	df=cbind(fb1[,1:2],tw1$count)
+	colnames(df) <- c('id','fb_shares','tw_shares')
+	return(df)
+}
+```
+
+Walkthrough 5
+===========
+type:sq1
+```{r}
+#5)
+targets=c(
+'http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html',
+'http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html'
+)
+
+dat=lapply(targets,getBoth)
+do.call(rbind,dat)
+```
+
+Comments
+=========================
+It's almost the same thing
+```{r eval=FALSE}
+url='http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html'
+api='http://graph.facebook.com/comments?id='
+target=paste(api,url,sep="")
+raw.data <- readLines(target, warn="F") 
+rd  <- fromJSON(raw.data)
+head(rd$data)
+```
+
+Getting article content
+===================
+Next week we will do scraping proper. But check out this awesome API:
+http://juicer.herokuapp.com/
+
+http://juicer.herokuapp.com/api/article?url=http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html
+
+
+Download the page
+==========
+```{r eval=F}
+url='http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html'
+api='http://juicer.herokuapp.com/api/article?url='
+
+target=paste(api,url,sep="")
+
+raw.data <- readLines(target, warn="F") 
+rd  <- fromJSON(raw.data)
+
+dat=rd$article
+dat$entities <-NULL
+
+dat <-data.frame(dat)
+```
+
+=====
+```{r}
+ent=rd$article$entities
+ent
+```
+
+What does the last frame give us?
+========
+Named entity recognition!
+
+```{r}
+
+#use square bracket notation to navigate these data:
+ent[ent$type=='Location',]
+```
+
+
+Summing up
+========
+given URLs of target pages, we can now:
+- download raw JSON data
+- extract fields of interest
+- put this in a function
+- apply the function to a list of targets
+
+
+
+Too many loops, variables, and functions?
+============
+
+If this has all been a bit much, below is a link to some extra material on all things variables, functions and loops
+
+
+http://fredheir.github.io/WebScraping/Lecture2_2015/extra.html
+http://fredheir.github.io/WebScraping/Lecture2_2015/extra.R
+
