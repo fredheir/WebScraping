@@ -11,6 +11,7 @@ css:style.css
 
 24/02/2015
 
+
 Logging on
 ========================================================
 type: s1
@@ -122,6 +123,7 @@ target_urls=paste("http://stats.grok.se/json/en/",
 target_urls
 ```
 
+
 download them one by one
 ==========================
 ```{r}
@@ -130,11 +132,23 @@ for (i in target_urls){
 }
 
 for (i in target_urls){
-	getData(i)
+	dat = getData(i)
 }
 ```
 
-What about storing the data?
+Loops: storing the data?
+===========
+```{r}
+hold=NULL
+for (i in 1:5){
+  print(paste0('this is loop number ',i))
+  hold=c(hold,i)
+  print(hold)
+}
+```
+
+
+Solution
 ========
 
 use rbind()
@@ -187,6 +201,20 @@ targets=c("Barack_Obama","United_States_elections,_2014")
 ```
 
 
+Walkthrough
+=========
+```{r}
+targets=c("Barack_Obama","United_States_elections,_2014")
+target_urls=paste("http://stats.grok.se/json/en/201401/",targets,sep="")
+dat=lapply(target_urls,getData)
+results=do.call(rbind,dat)
+
+#find number of rows for each: 
+t=nrow(results)/length(targets)
+t
+#apply ids:
+results$id=rep(targets,each=t)
+```
 
 Moving on
 ========
@@ -233,9 +261,9 @@ Moveable parts
 
 url='http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&order=desc'
 
-id=2643770
-max=10
-order=desc
+- id=2643770
+- max=10
+- order=desc
 
 Try repeating the process to download 100 comments
 
@@ -305,15 +333,16 @@ Task
 =====
 1) Download the number of Twitter shares for each of these these pages:
 
-http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html
-http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html
+- http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html
+- http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html
 
-2) Combine these responses into a single data.frame
+2) Use rbind to combine these responses into a single data.frame
 
 3) write a function that takes an input url to scrape Twitter
-4) Write a function that takes an input url to scrape both Twitter and Facebook
 
-5) use lapply and do.call to make a scraper
+4) Write a function that takes an input url to scrape both Twitter and Facebook (hard!)
+
+5) use lapply and do.call to make a scraper (copy code from slide 14 - parsimonious approach - above)
 
 
 Walkthrough
@@ -335,7 +364,7 @@ tw2=data.frame(rd)
 
 Walkthrough 2 and 3
 =========
-type:sq1
+type:sq2
 ```{r}
 #2)
 df=rbind(tw1,tw2)
@@ -374,7 +403,7 @@ getBoth <-function(url){
 
 Walkthrough 5
 ===========
-type:sq1
+type:sq2
 ```{r}
 #5)
 targets=c(
@@ -413,6 +442,7 @@ url='http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.
 api='http://juicer.herokuapp.com/api/article?url='
 
 target=paste(api,url,sep="")
+target
 
 raw.data <- readLines(target, warn="F") 
 rd  <- fromJSON(raw.data)
@@ -437,6 +467,7 @@ Named entity recognition!
 
 #use square bracket notation to navigate these data:
 ent[ent$type=='Location',]
+ent[ent$type=='Person',]
 ```
 
 
@@ -459,3 +490,72 @@ If this has all been a bit much, below is a link to some extra material on all t
 http://fredheir.github.io/WebScraping/Lecture2_2015/extra.html
 http://fredheir.github.io/WebScraping/Lecture2_2015/extra.R
 
+
+
+
+
+<!-- CSS formatting used in these slides -->
+
+<style>.s1 .reveal .state-background {
+  background: #E0E0FF;
+} 
+
+.sq1 .reveal section code {
+  font-size:145%;
+}
+.sq1 .reveal section p {
+  font-size:100%;
+}
+
+
+.sq .reveal section code {
+  font-size:125%;
+}
+.sq .reveal section p {
+  font-size:85%;
+}
+
+
+.sq2 .reveal section code {
+	font-size:100%;
+}
+.sq2 .reveal section p {
+  font-size:70%;
+}
+.reveal blockquote {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 5px auto;
+  padding: 5px;
+
+  font-style: normal;
+  background: #C6D7DC;
+  border: 1px solid #C6D7DC;
+  box-shadow: none;
+}
+
+.reveal pre {   
+  margin-top: 0;
+  max-width: 100%;
+  width: 100%;
+  border: 1px solid #ccc;
+  white-space: pre-wrap;
+  margin-bottom: 1em; 
+}
+
+.reveal pre code {
+/*  display: block; padding: 0.5em;
+*/  font-size: 1.6em;
+  line-height: 1.1em;
+  background-color: white;
+  overflow: visible;
+  max-height: none;
+  word-wrap: normal;
+}
+
+.reveal section centered {
+	text-align: center;
+   border: none;
+}
+</style>

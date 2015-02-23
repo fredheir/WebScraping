@@ -53,11 +53,20 @@ for (i in target_urls){
 }
 
 for (i in target_urls){
-	getData(i)
+	dat = getData(i)
 }
 
 
-# What about storing the data? ----------------------
+# Loops: storing the data? --------------------------
+hold=NULL
+for (i in 1:5){
+  print(paste0('this is loop number ',i))
+  hold=c(hold,i)
+  print(hold)
+}
+
+
+# Solution ------------------------------------------
 holder=NULL
 for (i in target_urls){
 	dat=getData(i)
@@ -83,6 +92,19 @@ results=do.call(rbind,dat)
 
 # Task ----------------------------------------------
 targets=c("Barack_Obama","United_States_elections,_2014")
+
+
+# Walkthrough ---------------------------------------
+targets=c("Barack_Obama","United_States_elections,_2014")
+target_urls=paste("http://stats.grok.se/json/en/201401/",targets,sep="")
+dat=lapply(target_urls,getData)
+results=do.call(rbind,dat)
+
+#find number of rows for each: 
+t=nrow(results)/length(targets)
+t
+#apply ids:
+results$id=rep(targets,each=t)
 
 
 # Download the page ---------------------------------
@@ -180,6 +202,7 @@ url='http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.
 api='http://juicer.herokuapp.com/api/article?url='
 
 target=paste(api,url,sep="")
+target
 
 raw.data <- readLines(target, warn="F") 
 rd  <- fromJSON(raw.data)
@@ -199,5 +222,6 @@ ent
 
 #use square bracket notation to navigate these data:
 ent[ent$type=='Location',]
+ent[ent$type=='Person',]
 
 
