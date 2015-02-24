@@ -1201,6 +1201,22 @@ target_urls
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
+<h3>Binding data together</h3>
+<div class="slideContent" >
+<p>3 functions:</p>
+
+<ul>
+<li>c() </li>
+<li>rbind()</li>
+<li>cbind()</li>
+</ul>
+
+<p>Simple solution: bind object A together with new object, and overwrite object A. Repeat.</p>
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
 <h3>Loops: storing the data?</h3>
 <div class="slideContent" >
 <pre><code class="r">hold &lt;- NULL
@@ -1441,9 +1457,11 @@ holder
 </div>
 
 </section>
-<section data-transition="linear" data-transition-speed="default">
+<section data-state="sq1" data-transition="linear" data-transition-speed="default">
 <h3>Parsimonious approach</h3>
 <div class="slideContent" >
+<p>Create a matrix and assign using square bracket notation - if you know the number of rows</p>
+
 <p>You could also use lapply here</p>
 
 <ul>
@@ -2075,7 +2093,7 @@ do.call(rbind,dat)
 2                                                          http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html
   fb_shares tw_shares
 1       697        39
-2      6940       250
+2      6946       250
 </code></pre>
 
 </div>
