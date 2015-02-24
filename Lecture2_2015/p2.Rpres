@@ -313,7 +313,7 @@ dat$replies <- NULL
 head(dat)
 ```
 
-Moveable parts
+Movable parts
 ===========
 
 url <- 'http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&order=desc'
