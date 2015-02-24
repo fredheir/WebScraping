@@ -1025,17 +1025,77 @@ rd.views
 
 </section>
 <section data-state="sq1" data-transition="linear" data-transition-speed="default">
+<h3>sorting a data frame</h3>
+<div class="slideContent" >
+<ul>
+<li>Use order()</li>
+<li>This will return ranks:</li>
+<li>These ranks can be applied using square bracket notation</li>
+</ul>
+
+<pre><code class="r">df &lt;- data.frame(rd.views)
+order(rownames(df))
+</code></pre>
+
+<pre><code> [1]  1  2  3  4  5  6  7  8  9 23 22 21 20 19 18 17 16 28 27 14 15 12 13
+[24] 10 11 29 30 31 24 26 25
+</code></pre>
+
+<pre><code class="r">#We need drop=False when sorting data frames with only one column, as the default
+#behaviour is to drop the data frame and return a vector - i.e. no row-lables:
+ord_df &lt;- df[order(rownames(df)),,drop=FALSE]
+ord_df
+</code></pre>
+
+<pre><code>           rd.views
+2012-01-01      283
+2012-01-02      573
+2012-01-03      578
+2012-01-04      666
+2012-01-05      673
+2012-01-06      626
+2012-01-07      360
+2012-01-08      430
+2012-01-09      747
+2012-01-10      716
+2012-01-11      800
+2012-01-12      710
+2012-01-13      742
+2012-01-14      439
+2012-01-15      568
+2012-01-16      669
+2012-01-17      730
+2012-01-18      734
+2012-01-19      726
+2012-01-20      739
+2012-01-21      536
+2012-01-22      458
+2012-01-23      673
+2012-01-24      771
+2012-01-25      758
+2012-01-26      739
+2012-01-27      738
+2012-01-28      490
+2012-01-29      500
+2012-01-30      838
+2012-01-31      753
+</code></pre>
+
+</div>
+
+</section>
+<section data-state="sq1" data-transition="linear" data-transition-speed="default">
 <h3>changing the date</h3>
 <div class="slideContent" >
-<pre><code class="r">target=201401
-url=paste(&quot;http://stats.grok.se/json/en/&quot;,
+<pre><code class="r">target &lt;- 201401
+url &lt;- paste(&quot;http://stats.grok.se/json/en/&quot;,
           target,&quot;/web_scraping&quot;,sep=&quot;&quot;)
 
 getData &lt;- function(url){
     raw.data &lt;- readLines(url, warn=&quot;F&quot;) 
     rd  &lt;- fromJSON(raw.data)
     rd.views &lt;- unlist(rd$daily_views )
-    df=data.frame(rd.views)
+    df &lt;- data.frame(rd.views)
     return(df)
 }
 
@@ -1099,8 +1159,8 @@ getData(url)
 <pre><code>[1] 201401 201402 201403 201404 201405 201406
 </code></pre>
 
-<pre><code class="r">targets=201401:201406
-target_urls=paste(&quot;http://stats.grok.se/json/en/&quot;,
+<pre><code class="r">targets &lt;- 201401:201406
+target_urls &lt;- paste(&quot;http://stats.grok.se/json/en/&quot;,
                   targets,&quot;/web_scraping&quot;,sep=&quot;&quot;)
 target_urls
 </code></pre>
@@ -1143,10 +1203,10 @@ target_urls
 <section data-transition="linear" data-transition-speed="default">
 <h3>Loops: storing the data?</h3>
 <div class="slideContent" >
-<pre><code class="r">hold=NULL
+<pre><code class="r">hold &lt;- NULL
 for (i in 1:5){
   print(paste0(&#39;this is loop number &#39;,i))
-  hold=c(hold,i)
+  hold &lt;- c(hold,i)
   print(hold)
 }
 </code></pre>
@@ -1172,10 +1232,10 @@ for (i in 1:5){
 <p>use rbind()
 create empty vector, and add data to the end of it:</p>
 
-<pre><code class="r">holder=NULL
+<pre><code class="r">holder &lt;- NULL
 for (i in target_urls){
-    dat=getData(i)
-    holder=rbind(holder,dat)
+    dat &lt;- getData(i)
+    holder &lt;- rbind(holder,dat)
 }
 
 holder
@@ -1391,8 +1451,8 @@ holder
 <li>do.call: executes a function to each part of an item (here: the list)</li>
 </ul>
 
-<pre><code class="r">dat=lapply(target_urls,getData)
-results=do.call(rbind,dat)
+<pre><code class="r">dat &lt;- lapply(target_urls,getData)
+results &lt;- do.call(rbind,dat)
 results
 </code></pre>
 
@@ -1591,24 +1651,24 @@ results
 <section data-state="sq1" data-transition="linear" data-transition-speed="default">
 <h3>putting it together</h3>
 <div class="slideContent" >
-<pre><code class="r">targets=201401:201406
-targets=paste(&quot;http://stats.grok.se/json/en/&quot;,
+<pre><code class="r">targets &lt;- 201401:201406
+targets &lt;- paste(&quot;http://stats.grok.se/json/en/&quot;,
               201401:201406,&quot;/web_scraping&quot;,sep=&quot;&quot;)
-dat=lapply(targets,getData)
-results=do.call(rbind,dat)
+dat &lt;- lapply(targets,getData)
+results &lt;- do.call(rbind,dat)
 </code></pre>
 
 </div>
 
 </section>
-<section data-transition="linear" data-transition-speed="default">
+<section data-state="alert" data-transition="linear" data-transition-speed="default">
 <h3>Task</h3>
 <div class="slideContent" >
 <p>Edit the code to download data for a different range of dates</p>
 
 <p>Edit the second line to download a vector of pages, rather than dates:</p>
 
-<pre><code class="r">targets=c(&quot;Barack_Obama&quot;,&quot;United_States_elections,_2014&quot;)
+<pre><code class="r">targets &lt;- c(&quot;Barack_Obama&quot;,&quot;United_States_elections,_2014&quot;)
 </code></pre>
 
 </div>
@@ -1617,13 +1677,13 @@ results=do.call(rbind,dat)
 <section data-transition="linear" data-transition-speed="default">
 <h3>Walkthrough</h3>
 <div class="slideContent" >
-<pre><code class="r">targets=c(&quot;Barack_Obama&quot;,&quot;United_States_elections,_2014&quot;)
-target_urls=paste(&quot;http://stats.grok.se/json/en/201401/&quot;,targets,sep=&quot;&quot;)
-dat=lapply(target_urls,getData)
-results=do.call(rbind,dat)
+<pre><code class="r">targets &lt;- c(&quot;Barack_Obama&quot;,&quot;United_States_elections,_2014&quot;)
+target_urls &lt;- paste(&quot;http://stats.grok.se/json/en/201401/&quot;,targets,sep=&quot;&quot;)
+dat &lt;- lapply(target_urls,getData)
+results &lt;- do.call(rbind,dat)
 
 #find number of rows for each: 
-t=nrow(results)/length(targets)
+t &lt;- nrow(results)/length(targets)
 t
 </code></pre>
 
@@ -1631,7 +1691,7 @@ t
 </code></pre>
 
 <pre><code class="r">#apply ids:
-results$id=rep(targets,each=t)
+results$id &lt;- rep(targets,each=t)
 </code></pre>
 
 </div>
@@ -1654,7 +1714,7 @@ results$id=rep(targets,each=t)
 <section data-state="sq1" data-transition="linear" data-transition-speed="default">
 <h3>Download the page</h3>
 <div class="slideContent" >
-<pre><code class="r">url=&#39;http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&amp;order=desc&#39;
+<pre><code class="r">url &lt;- &#39;http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&amp;order=desc&#39;
 raw.data &lt;- readLines(url, warn=&quot;F&quot;) 
 rd  &lt;- fromJSON(raw.data)
 
@@ -1752,7 +1812,7 @@ rd$payload$total</p>
 &#39;page&#39;
 Here&#39;s a reasonably well formatted dataframe. We&#39;ll get rid of replies, though:</p>
 
-<pre><code class="r">dat=rd$payload$page
+<pre><code class="r">dat &lt;- rd$payload$page
 dat$replies &lt;- NULL
 head(dat)
 </code></pre>
@@ -1814,12 +1874,12 @@ head(dat)
 <section data-transition="linear" data-transition-speed="default">
 <h3>Moveable parts</h3>
 <div class="slideContent" >
-<p>url=&#39;<a href="http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&amp;order=desc">http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&amp;order=desc</a>&#39;</p>
+<p>url &lt;- &#39;<a href="http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&amp;order=desc">http://www.dailymail.co.uk/reader-comments/p/asset/readcomments/2643770?max=10&amp;order=desc</a>&#39;</p>
 
 <ul>
-<li>id=2643770</li>
-<li>max=10</li>
-<li>order=desc</li>
+<li>id &lt;- 2643770</li>
+<li>max &lt;- 10</li>
+<li>order &lt;- desc</li>
 </ul>
 
 <p>Try repeating the process to download 100 comments</p>
@@ -1895,10 +1955,10 @@ The question mark indicates the start of a query, while &amp; is used to separat
 <div class="slideContent" >
 <p>Facebook</p>
 
-<pre><code class="r">url=&#39;http://graph.facebook.com/?id=http://www.bbc.co.uk/sport/0/football/31583092&#39;
+<pre><code class="r">url &lt;- &#39;http://graph.facebook.com/?id=http://www.bbc.co.uk/sport/0/football/31583092&#39;
 raw.data &lt;- readLines(url, warn=&quot;F&quot;) 
 rd  &lt;- fromJSON(raw.data)
-df=data.frame(rd)
+df &lt;- data.frame(rd)
 </code></pre>
 
 <p>Repeat for Twitter</p>
@@ -1906,7 +1966,7 @@ df=data.frame(rd)
 </div>
 
 </section>
-<section data-transition="linear" data-transition-speed="default">
+<section data-state="alert" data-transition="linear" data-transition-speed="default">
 <h3>Task</h3>
 <div class="slideContent" >
 <p>1) Download the number of Twitter shares for each of these these pages:</p>
@@ -1931,17 +1991,17 @@ df=data.frame(rd)
 <h3>Walkthrough</h3>
 <div class="slideContent" >
 <pre><code class="r">#1) 
-url=&#39;http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html&#39;
-target=paste(&#39;http://urls.api.twitter.com/1/urls/count.json?url=&#39;,url,sep=&quot;&quot;)
+url &lt;- &#39;http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html&#39;
+target &lt;- paste(&#39;http://urls.api.twitter.com/1/urls/count.json?url=&#39;,url,sep=&quot;&quot;)
 raw.data &lt;- readLines(target, warn=&quot;F&quot;) 
 rd  &lt;- fromJSON(raw.data)
-tw1=data.frame(rd)
+tw1 &lt;- data.frame(rd)
 
-url2=&#39;http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html&#39;
-target=paste(&#39;http://urls.api.twitter.com/1/urls/count.json?url=&#39;,url2,sep=&quot;&quot;)
+url2 &lt;- &#39;http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html&#39;
+target &lt;- paste(&#39;http://urls.api.twitter.com/1/urls/count.json?url=&#39;,url2,sep=&quot;&quot;)
 raw.data &lt;- readLines(target, warn=&quot;F&quot;) 
 rd  &lt;- fromJSON(raw.data)
-tw2=data.frame(rd)
+tw2 &lt;- data.frame(rd)
 </code></pre>
 
 </div>
@@ -1951,21 +2011,21 @@ tw2=data.frame(rd)
 <h3>Walkthrough 2 and 3</h3>
 <div class="slideContent" >
 <pre><code class="r">#2)
-df=rbind(tw1,tw2)
+df &lt;- rbind(tw1,tw2)
 
 #3)
 getTweetCount &lt;-function(url){
-    target=paste(&#39;http://urls.api.twitter.com/1/urls/count.json?url=&#39;,url,sep=&quot;&quot;)
+    target &lt;- paste(&#39;http://urls.api.twitter.com/1/urls/count.json?url=&#39;,url,sep=&quot;&quot;)
     raw.data &lt;- readLines(target, warn=&quot;F&quot;) 
     rd  &lt;- fromJSON(raw.data)
-    tw1=data.frame(rd)
+    tw1 &lt;- data.frame(rd)
     return(tw1)
 }
 getTweetCount(url2)
 </code></pre>
 
 <pre><code>  count
-1   166
+1   250
                                                                                url
 1 http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html/
 </code></pre>
@@ -1978,17 +2038,17 @@ getTweetCount(url2)
 <div class="slideContent" >
 <pre><code class="r">#4)
 getBoth &lt;-function(url){
-    target=paste(&#39;http://urls.api.twitter.com/1/urls/count.json?url=&#39;,url,sep=&quot;&quot;)
+    target &lt;- paste(&#39;http://urls.api.twitter.com/1/urls/count.json?url=&#39;,url,sep=&quot;&quot;)
     raw.data &lt;- readLines(target, warn=&quot;F&quot;) 
     rd  &lt;- fromJSON(raw.data)
-    tw1=data.frame(rd)
+    tw1 &lt;- data.frame(rd)
 
-    target=paste(&#39;http://graph.facebook.com/?id=&#39;,url,sep=&#39;&#39;)
+    target &lt;- paste(&#39;http://graph.facebook.com/?id=&#39;,url,sep=&#39;&#39;)
     raw.data &lt;- readLines(target, warn=&quot;F&quot;) 
     rd  &lt;- fromJSON(raw.data)
-    fb1=data.frame(rd)
+    fb1 &lt;- data.frame(rd)
 
-    df=cbind(fb1[,1:2],tw1$count)
+    df &lt;- cbind(fb1[,1:2],tw1$count)
     colnames(df) &lt;- c(&#39;id&#39;,&#39;fb_shares&#39;,&#39;tw_shares&#39;)
     return(df)
 }
@@ -2001,12 +2061,12 @@ getBoth &lt;-function(url){
 <h3>Walkthrough 5</h3>
 <div class="slideContent" >
 <pre><code class="r">#5)
-targets=c(
+targets &lt;- c(
 &#39;http://www.dailymail.co.uk/news/article-2643770/Why-Americans-suckers-conspiracy-theories-The-country-founded-says-British-academic.html&#39;,
 &#39;http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html&#39;
 )
 
-dat=lapply(targets,getBoth)
+dat &lt;- lapply(targets,getBoth)
 do.call(rbind,dat)
 </code></pre>
 
@@ -2015,7 +2075,7 @@ do.call(rbind,dat)
 2                                                          http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html
   fb_shares tw_shares
 1       697        39
-2      4024       166
+2      6937       250
 </code></pre>
 
 </div>
@@ -2026,9 +2086,9 @@ do.call(rbind,dat)
 <div class="slideContent" >
 <p>It&#39;s almost the same thing</p>
 
-<pre><code class="r">url=&#39;http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html&#39;
-api=&#39;http://graph.facebook.com/comments?id=&#39;
-target=paste(api,url,sep=&quot;&quot;)
+<pre><code class="r">url &lt;- &#39;http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html&#39;
+api &lt;- &#39;http://graph.facebook.com/comments?id=&#39;
+target &lt;- paste(api,url,sep=&quot;&quot;)
 raw.data &lt;- readLines(target, warn=&quot;F&quot;) 
 rd  &lt;- fromJSON(raw.data)
 head(rd$data)
@@ -2051,16 +2111,16 @@ head(rd$data)
 <section data-transition="linear" data-transition-speed="default">
 <h3>Download the page</h3>
 <div class="slideContent" >
-<pre><code class="r">url=&#39;http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html&#39;
-api=&#39;http://juicer.herokuapp.com/api/article?url=&#39;
+<pre><code class="r">url &lt;- &#39;http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html&#39;
+api &lt;- &#39;http://juicer.herokuapp.com/api/article?url=&#39;
 
-target=paste(api,url,sep=&quot;&quot;)
+target &lt;- paste(api,url,sep=&quot;&quot;)
 target
 
 raw.data &lt;- readLines(target, warn=&quot;F&quot;) 
 rd  &lt;- fromJSON(raw.data)
 
-dat=rd$article
+dat &lt;- rd$article
 dat$entities &lt;-NULL
 
 dat &lt;-data.frame(dat)
@@ -2073,11 +2133,8 @@ dat
 <section data-transition="linear" data-transition-speed="default">
 
 <div class="slideContent noTitle" >
-<pre><code class="r">ent=rd$article$entities
+<pre><code class="r">ent &lt;- rd$article$entities
 ent
-</code></pre>
-
-<pre><code>NULL
 </code></pre>
 
 </div>
@@ -2090,15 +2147,7 @@ ent
 
 <pre><code class="r">#use square bracket notation to navigate these data:
 ent[ent$type==&#39;Location&#39;,]
-</code></pre>
-
-<pre><code>NULL
-</code></pre>
-
-<pre><code class="r">ent[ent$type==&#39;Person&#39;,]
-</code></pre>
-
-<pre><code>NULL
+ent[ent$type==&#39;Person&#39;,]
 </code></pre>
 
 </div>
