@@ -22,7 +22,7 @@ rd.views <- unlist(rd$daily_views )
 rd.views
 
 
-# sorting a data frame ------------------------------
+# Sorting a data frame ------------------------------
 df <- data.frame(rd.views)
 order(rownames(df))
 
@@ -32,7 +32,7 @@ ord_df <- df[order(rownames(df)),,drop=FALSE]
 ord_df
 
 
-# changing the date ---------------------------------
+# Changing the date ---------------------------------
 target <- 201401
 url <- paste("http://stats.grok.se/json/en/",
           target,"/web_scraping",sep="")
@@ -57,7 +57,7 @@ target_urls <- paste("http://stats.grok.se/json/en/",
 target_urls
 
 
-# download them one by one --------------------------
+# Download them one by one --------------------------
 for (i in target_urls){
 	print (i)
 }
@@ -92,7 +92,7 @@ results <- do.call(rbind,dat)
 results
 
 
-# putting it together -------------------------------
+# Putting it together -------------------------------
 targets <- 201401:201406
 targets <- paste("http://stats.grok.se/json/en/",
               201401:201406,"/web_scraping",sep="")

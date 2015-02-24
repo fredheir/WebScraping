@@ -109,7 +109,7 @@ in response:
 - field name (daily_views)
 
 
-sorting a data frame
+Sorting a data frame
 =================
 type:sq1
 - Use order()
@@ -127,7 +127,7 @@ ord_df
 ```
 
 
-changing the date
+Changing the date
 =================
 type:sq1
 ```{r}
@@ -162,7 +162,7 @@ target_urls
 ```
 
 
-download them one by one
+Download them one by one
 ==========================
 ```{r}
 for (i in target_urls){
@@ -217,7 +217,7 @@ results <- do.call(rbind,dat)
 results
 ```
 
-putting it together
+Putting it together
 ==================
 type:sq1
 ```{r}
