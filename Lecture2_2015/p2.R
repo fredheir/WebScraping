@@ -24,11 +24,10 @@ rd.views
 
 # Sorting a data frame ------------------------------
 df <- data.frame(rd.views)
+df$dates <-rownames(df)
 order(rownames(df))
 
-#We need drop=False when sorting data frames with only one column, as the default
-#behaviour is to drop the data frame and return a vector - i.e. no row-lables:
-ord_df <- df[order(rownames(df)),,drop=FALSE]
+ord_df <-df[order(rownames(df)),]
 ord_df
 
 
@@ -42,6 +41,8 @@ getData <- function(url){
 	rd  <- fromJSON(raw.data)
 	rd.views <- unlist(rd$daily_views )
 	df <- data.frame(rd.views)
+  #Because row names tend to get lost....
+  df$dates <- rownames(df)
 	return(df)
 }
 
@@ -87,17 +88,14 @@ holder
 
 
 # Parsimonious approach -----------------------------
-dat <- lapply(target_urls,getData)
-results <- do.call(rbind,dat)
-results
+dat <- ldply(target_urls,getData)
 
 
 # Putting it together -------------------------------
 targets <- 201401:201406
 targets <- paste("http://stats.grok.se/json/en/",
               201401:201406,"/web_scraping",sep="")
-dat <- lapply(targets,getData)
-results <- do.call(rbind,dat)
+dat <- ldply(targets,getData)
 
 
 # Task ----------------------------------------------
@@ -107,8 +105,7 @@ targets <- c("Barack_Obama","United_States_elections,_2014")
 # Walkthrough ---------------------------------------
 targets <- c("Barack_Obama","United_States_elections,_2014")
 target_urls <- paste("http://stats.grok.se/json/en/201401/",targets,sep="")
-dat <- lapply(target_urls,getData)
-results <- do.call(rbind,dat)
+results <- ldply(target_urls,getData)
 
 #find number of rows for each: 
 t <- nrow(results)/length(targets)
@@ -194,8 +191,7 @@ targets <- c(
 'http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html'
 )
 
-dat <- lapply(targets,getBoth)
-do.call(rbind,dat)
+dat <- ldply(targets,getBoth)
 
 
 # Comments ------------------------------------------

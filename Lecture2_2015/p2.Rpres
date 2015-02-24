@@ -118,11 +118,10 @@ type:sq1
 
 ```{r}
 df <- data.frame(rd.views)
+df$dates <-rownames(df)
 order(rownames(df))
 
-#We need drop=False when sorting data frames with only one column, as the default
-#behaviour is to drop the data frame and return a vector - i.e. no row-lables:
-ord_df <- df[order(rownames(df)),,drop=FALSE]
+ord_df <-df[order(rownames(df)),]
 ord_df
 ```
 
@@ -140,6 +139,8 @@ getData <- function(url){
 	rd  <- fromJSON(raw.data)
 	rd.views <- unlist(rd$daily_views )
 	df <- data.frame(rd.views)
+  #Because row names tend to get lost....
+  df$dates <- rownames(df)
 	return(df)
 }
 
@@ -185,6 +186,10 @@ Simple solution: bind object A together with new object, and overwrite object A.
 
 Loops: storing the data?
 ===========
+type:sq
+- Usually we use the variable i
+- Why variable? Because we can reuse 'i', even though the value it refers to 'varies'
+- Why i? i is for index. But you could use anything you want
 ```{r}
 hold <- NULL
 for (i in 1:5){
@@ -219,14 +224,17 @@ Parsimonious approach
 type:sq1
 Create a matrix and assign using square bracket notation - if you know the number of rows
 
-You could also use lapply here
+You could also use ldply here:
+> For each element of a list, apply function then combine results into a data frame.
+
+Does the same thing as lapply + do.call(rbind)
 - lapply: 'applies' a function to each item in a vector. Returns a list. 
 - do.call: executes a function to each part of an item (here: the list)
 
+Apply family: apply(), sapply(), lapply()
+extensions from Hadley Wickham's plyr: ddply(), ldply() the most useful
 ```{r}
-dat <- lapply(target_urls,getData)
-results <- do.call(rbind,dat)
-results
+dat <- ldply(target_urls,getData)
 ```
 
 Putting it together
@@ -236,8 +244,7 @@ type:sq1
 targets <- 201401:201406
 targets <- paste("http://stats.grok.se/json/en/",
               201401:201406,"/web_scraping",sep="")
-dat <- lapply(targets,getData)
-results <- do.call(rbind,dat)
+dat <- ldply(targets,getData)
 ```
 
 Task
@@ -257,8 +264,7 @@ Walkthrough
 ```{r}
 targets <- c("Barack_Obama","United_States_elections,_2014")
 target_urls <- paste("http://stats.grok.se/json/en/201401/",targets,sep="")
-dat <- lapply(target_urls,getData)
-results <- do.call(rbind,dat)
+results <- ldply(target_urls,getData)
 
 #find number of rows for each: 
 t <- nrow(results)/length(targets)
@@ -394,7 +400,7 @@ type:alert
 
 4) Write a function that takes an input url to scrape both Twitter and Facebook (hard!)
 
-5) use lapply and do.call to make a scraper (copy code from slide 14 - parsimonious approach - above)
+5) use ldply to make a scraper (copy code from slide 14 - parsimonious approach - above)
 
 
 Walkthrough
@@ -463,8 +469,7 @@ targets <- c(
 'http://www.huffingtonpost.com/2015/02/22/wisconsin-right-to-work_n_6731064.html'
 )
 
-dat <- lapply(targets,getBoth)
-do.call(rbind,dat)
+dat <- ldply(targets,getBoth)
 ```
 
 Comments
