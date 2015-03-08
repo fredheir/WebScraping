@@ -911,7 +911,7 @@ require(RCurl)
 </div>
 
 </section>
-<section data-state="sq1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq2" data-transition="linear" data-transition-speed="default">
 <h3>Getting to know HTML structure</h3>
 <div class="slideContent" >
 <ul>
@@ -977,7 +977,7 @@ head(tables[[6]])
 </div>
 
 </section>
-<section data-state="sq1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq2" data-transition="linear" data-transition-speed="default">
 <h3>Download html</h3>
 <div class="slideContent" >
 <p>Dont print a webpage like this to the console!</p>
@@ -1061,10 +1061,8 @@ substring (raw,1,200)
 
 </section>
 <section data-state="sq2" data-transition="linear" data-transition-speed="default">
-<h3>Digging deeper</h3>
+<h3>What about other headings?</h3>
 <div class="slideContent" >
-<p>What about other headings?</p>
-
 <pre><code class="r">xpathSApply(PARSED, &quot;//h3&quot;,xmlValue)
 </code></pre>
 
@@ -1276,7 +1274,7 @@ browseURL(links[1])
 </div>
 
 </section>
-<section data-state="sq1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq" data-transition="linear" data-transition-speed="default">
 <h3>Scrape Telegraph</h3>
 <div class="slideContent" >
 <p><a href="http://www.telegraph.co.uk/search/?queryText=nemtsov&amp;sort=relevant">http://www.telegraph.co.uk/search/?queryText=nemtsov&amp;sort=relevant</a></p>
@@ -1314,7 +1312,7 @@ links&lt;-links[grep(&#39;http&#39;,links)]
 </div>
 
 </section>
-<section data-state="sq1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq" data-transition="linear" data-transition-speed="default">
 <h3>Daily Mail</h3>
 <div class="slideContent" >
 <pre><code class="r">url &lt;- &#39;http://www.dailymail.co.uk/home/search.html?sel=site&amp;searchPhrase=nemtsov&#39;
@@ -1346,7 +1344,7 @@ length(links)
 </div>
 
 </section>
-<section data-transition="linear" data-transition-speed="default">
+<section data-state="sq2" data-transition="linear" data-transition-speed="default">
 <h3>dt2</h3>
 <div class="slideContent" >
 <pre><code class="r">head(links)
@@ -1555,7 +1553,7 @@ dat &lt;- ldply(links,bbcScraper)
 </div>
 
 </section>
-<section data-state="sq 2" data-transition="linear" data-transition-speed="default">
+<section data-state="sq2" data-transition="linear" data-transition-speed="default">
 <h3>Guardian</h3>
 <div class="slideContent" >
 <p>start with the bbc scraper as a base, then change the necessary fields</p>
@@ -1636,7 +1634,7 @@ dat &lt;- ldply(links,bbcScraper)
 </div>
 
 </section>
-<section data-state="sq1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq" data-transition="linear" data-transition-speed="default">
 <h3>Get Guardian links</h3>
 <div class="slideContent" >
 <p>scraping is getting harder</p>

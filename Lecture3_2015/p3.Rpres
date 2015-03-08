@@ -94,7 +94,7 @@ require(RCurl)
 
 Getting to know HTML structure
 ==============================
-type:sq1
+type:sq2
 
 - http://en.wikipedia.org/wiki/Euromaidan
 - http://en.wikipedia.org/wiki/Boris_Nemtsov
@@ -138,7 +138,7 @@ head(tables[[6]])
 
 Download html
 =====================
-type:sq1
+type:sq2
 Dont print a webpage like this to the console!
 
 Download using readLines()
@@ -203,10 +203,10 @@ HTML tags2
 
 
 
-Digging deeper
+What about other headings?
 =====================
 type:sq2
-What about other headings?
+
 
 ```{r}
 xpathSApply(PARSED, "//h3",xmlValue)
@@ -347,7 +347,7 @@ We can also use wildcards:
 
 Scrape Telegraph
 =======================
-type:sq1
+type:sq
 
 
 http://www.telegraph.co.uk/search/?queryText=nemtsov&sort=relevant
@@ -370,7 +370,7 @@ links<-links[grep('http',links)]
 
 Daily Mail
 ======
-type:sq1
+type:sq
 ```{r}
 url <- 'http://www.dailymail.co.uk/home/search.html?sel=site&searchPhrase=nemtsov'
 raw <-  getURL(url)#,encoding="UTF-8") 
@@ -385,6 +385,7 @@ links<-unique(links)
 
 dt2
 =============
+type:sq2
 ```{r}
 head(links)
 
@@ -494,7 +495,7 @@ dat <- ldply(links,bbcScraper)
 
 Guardian
 =======================
-type:sq 2
+type:sq2
 start with the bbc scraper as a base, then change the necessary fields
 
 ```{r}
@@ -545,7 +546,7 @@ guardianScraper <- function(url){
 
 Get Guardian links
 =====================
-type:sq1
+type:sq
 scraping is getting harder
 
 ```{r}
