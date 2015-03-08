@@ -36,11 +36,11 @@ Download the R file to your computer
 
 Install the following packages:
 ===============
-XML
-RCurl
-lubridate
-plyr
-stringr
+- XML
+- RCurl
+- lubridate
+- plyr
+- stringr
 
 
 
@@ -347,7 +347,7 @@ We can also use wildcards:
 
 Scrape Telegraph
 =======================
-type:sq
+type:sq2
 
 
 http://www.telegraph.co.uk/search/?queryText=nemtsov&sort=relevant
@@ -520,7 +520,7 @@ type:sq2
 
 Guardian scraper
 ======================
-type:sq2
+type:sq
 ```{r}
 guardianScraper <- function(url){
   SOURCE <-  getURL(url,encoding="UTF-8")
@@ -546,7 +546,7 @@ guardianScraper <- function(url){
 
 Get Guardian links
 =====================
-type:sq
+type:sq2
 scraping is getting harder
 
 ```{r}
