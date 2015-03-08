@@ -94,7 +94,7 @@ require(RCurl)
 
 Getting to know HTML structure
 ==============================
-type:s1
+type:sq1
 
 - http://en.wikipedia.org/wiki/Euromaidan
 - http://en.wikipedia.org/wiki/Boris_Nemtsov
@@ -127,7 +127,7 @@ Which others do you know or can you find?
 
 Extracting a table
 ==============
-type:s1
+type:sq1
 can be a bit fiddly to format, but quite accessible:
 ```{r}
 url='http://en.wikipedia.org/wiki/Elections_in_Russia'
@@ -138,7 +138,7 @@ head(tables[[6]])
 
 Download html
 =====================
-type:s1
+type:sq1
 Dont print a webpage like this to the console!
 
 Download using readLines()
@@ -205,7 +205,7 @@ HTML tags2
 
 Digging deeper
 =====================
-type:sq1
+type:sq2
 What about other headings?
 
 ```{r}
@@ -259,7 +259,7 @@ Principles of scraping
 
 Get references
 =======================
-type:sq
+type:sq2
 
 Content of the references
 ```{r}
@@ -348,6 +348,8 @@ We can also use wildcards:
 Scrape Telegraph
 =======================
 type:sq1
+
+
 http://www.telegraph.co.uk/search/?queryText=nemtsov&sort=relevant
 
 Note: this is a get request (see the ? and & characters?)
@@ -379,7 +381,11 @@ links<-xpathSApply(PARSED, "//div[@class='sch-results']//a/@href")
 length(links)
 length(unique(links))
 links<-unique(links)
+```
 
+dt2
+=============
+```{r}
 head(links)
 
 paste('http://www.dailymail.co.uk',links,sep='')
@@ -414,7 +420,7 @@ http://www.bbc.co.uk/search?q=nemtsov
 
 Solution
 ============
-type:sq1
+type:sq2
 ```{r}
 url <- 'http://www.bbc.co.uk/search?q=nemtsov'
 raw <-  getURL(url,encoding="UTF-8") 
@@ -513,7 +519,7 @@ type:sq2
 
 Guardian scraper
 ======================
-type:sq
+type:sq2
 ```{r}
 guardianScraper <- function(url){
   SOURCE <-  getURL(url,encoding="UTF-8")

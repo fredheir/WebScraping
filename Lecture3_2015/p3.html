@@ -911,7 +911,7 @@ require(RCurl)
 </div>
 
 </section>
-<section data-state="s1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq1" data-transition="linear" data-transition-speed="default">
 <h3>Getting to know HTML structure</h3>
 <div class="slideContent" >
 <ul>
@@ -955,7 +955,7 @@ require(RCurl)
 </div>
 
 </section>
-<section data-state="s1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq1" data-transition="linear" data-transition-speed="default">
 <h3>Extracting a table</h3>
 <div class="slideContent" >
 <p>can be a bit fiddly to format, but quite accessible:</p>
@@ -977,7 +977,7 @@ head(tables[[6]])
 </div>
 
 </section>
-<section data-state="s1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq1" data-transition="linear" data-transition-speed="default">
 <h3>Download html</h3>
 <div class="slideContent" >
 <p>Dont print a webpage like this to the console!</p>
@@ -1060,7 +1060,7 @@ substring (raw,1,200)
 </div>
 
 </section>
-<section data-state="sq1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq2" data-transition="linear" data-transition-speed="default">
 <h3>Digging deeper</h3>
 <div class="slideContent" >
 <p>What about other headings?</p>
@@ -1106,7 +1106,7 @@ str_trim(temp[10])
 <pre><code class="r">length(xpathSApply(PARSED, &quot;//a/@href&quot;))
 </code></pre>
 
-<pre><code>[1] 793
+<pre><code>[1] 797
 </code></pre>
 
 <p>That&#39;s hundreds of links!!! That&#39;s hopeless. We want to be more selective. Back to the drawing board</p>
@@ -1146,7 +1146,7 @@ str_trim(temp[10])
 </div>
 
 </section>
-<section data-state="sq" data-transition="linear" data-transition-speed="default">
+<section data-state="sq2" data-transition="linear" data-transition-speed="default">
 <h3>Get references</h3>
 <div class="column column1 slideContent" >
 <p>Content of the references</p>
@@ -1279,7 +1279,9 @@ browseURL(links[1])
 <section data-state="sq1" data-transition="linear" data-transition-speed="default">
 <h3>Scrape Telegraph</h3>
 <div class="slideContent" >
-<div class="fieldError"><span>Unrecognized slide field:</span> <code>http</code><br/></div><p>Note: this is a get request (see the ? and &amp; characters?)</p>
+<p><a href="http://www.telegraph.co.uk/search/?queryText=nemtsov&amp;sort=relevant">http://www.telegraph.co.uk/search/?queryText=nemtsov&amp;sort=relevant</a></p>
+
+<p>Note: this is a get request (see the ? and &amp; characters?)</p>
 
 <pre><code class="r">url &lt;- &#39;http://www.telegraph.co.uk/search/?queryText=nemtsov&amp;sort=relevant&#39;
 raw &lt;-  getURL(url)#,encoding=&quot;UTF-8&quot;) 
@@ -1339,72 +1341,79 @@ length(links)
 </code></pre>
 
 <pre><code class="r">links&lt;-unique(links)
+</code></pre>
 
-head(links)
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
+<h3>dt2</h3>
+<div class="slideContent" >
+<pre><code class="r">head(links)
 </code></pre>
 
 <pre><code>[1] &quot;#&quot;                                                                                                                                      
-[2] &quot;/video/news/video-1165510/Suspects-in-killing-of-Boris-Nemtsov-appear-in-Moscow-courthouse.html&quot;                                        
-[3] &quot;/video/news/video-1165505/Boris-Nemtsov-shooting-suspects-seen-caged-in-court.html&quot;                                                     
-[4] &quot;/wires/reuters/article-2985103/Russian-court-orders-three-Nemtsov-suspects-kept-custody.html&quot;                                           
-[5] &quot;/news/article-2985051/Five-suspects-court-assassination-Vladimir-Putin-critic-Boris-Nemtsov-one-revealed-policeman-served-Chechnya.html&quot;
-[6] &quot;/wires/reuters/article-2985011/Russian-authorities-charge-two-Nemtsov-shooting.html&quot;                                                    
+[2] &quot;/wires/reuters/article-2985383/Suspect-Nemtsov-killing-devout-Muslim-shocked-Charlie-Hebdo-cartoons--Chechen-leader.html&quot;               
+[3] &quot;/video/news/video-1165510/Suspects-in-killing-of-Boris-Nemtsov-appear-in-Moscow-courthouse.html&quot;                                        
+[4] &quot;/video/news/video-1165505/Boris-Nemtsov-shooting-suspects-seen-caged-in-court.html&quot;                                                     
+[5] &quot;/wires/reuters/article-2985103/Russian-court-orders-three-Nemtsov-suspects-kept-custody.html&quot;                                           
+[6] &quot;/news/article-2985051/Five-suspects-court-assassination-Vladimir-Putin-critic-Boris-Nemtsov-one-revealed-policeman-served-Chechnya.html&quot;
 </code></pre>
 
 <pre><code class="r">paste(&#39;http://www.dailymail.co.uk&#39;,links,sep=&#39;&#39;)
 </code></pre>
 
 <pre><code> [1] &quot;http://www.dailymail.co.uk#&quot;                                                                                                                                             
- [2] &quot;http://www.dailymail.co.uk/video/news/video-1165510/Suspects-in-killing-of-Boris-Nemtsov-appear-in-Moscow-courthouse.html&quot;                                               
- [3] &quot;http://www.dailymail.co.uk/video/news/video-1165505/Boris-Nemtsov-shooting-suspects-seen-caged-in-court.html&quot;                                                            
- [4] &quot;http://www.dailymail.co.uk/wires/reuters/article-2985103/Russian-court-orders-three-Nemtsov-suspects-kept-custody.html&quot;                                                  
- [5] &quot;http://www.dailymail.co.uk/news/article-2985051/Five-suspects-court-assassination-Vladimir-Putin-critic-Boris-Nemtsov-one-revealed-policeman-served-Chechnya.html&quot;       
- [6] &quot;http://www.dailymail.co.uk/wires/reuters/article-2985011/Russian-authorities-charge-two-Nemtsov-shooting.html&quot;                                                           
- [7] &quot;http://www.dailymail.co.uk/wires/ap/article-2984912/Nemtsov-killing-suspects-whereabouts-unknown.html&quot;                                                                   
- [8] &quot;http://www.dailymail.co.uk/wires/reuters/article-2984865/One-Nemtsov-killing-suspects-served-police-report.html&quot;                                                         
- [9] &quot;http://www.dailymail.co.uk/wires/reuters/article-2984828/One-Nemtsov-killing-suspects-served-police-report.html&quot;                                                         
-[10] &quot;http://www.dailymail.co.uk/video/news/video-1165340/Russia-announces-two-arrests-in-Boris-Nemtsov-murder.html&quot;                                                           
-[11] &quot;http://www.dailymail.co.uk/wires/ap/article-2983910/Saturday-March-7-2015.html&quot;                                                                                          
-[12] &quot;http://www.dailymail.co.uk/wires/reuters/article-2983867/Two-suspects-detained-Nemtsov-murder--Russian-security-chief.html&quot;                                              
-[13] &quot;http://www.dailymail.co.uk/news/article-2983864/Russia-arrests-two-murder-Putin-opponent-gunned-outside-Kremlin.html&quot;                                                    
-[14] &quot;http://www.dailymail.co.uk/wires/ap/article-2983856/Russia-2-suspects-detained-murder-Boris-Nemtsov.html&quot;                                                                
-[15] &quot;http://www.dailymail.co.uk/wires/reuters/article-2983240/Nemtsovs-friends-ask-police-shot.html&quot;                                                                          
-[16] &quot;http://www.dailymail.co.uk/wires/reuters/article-2982521/Kremlin-critic-Navalny-jail-vows-fight-on.html&quot;                                                                 
-[17] &quot;http://www.dailymail.co.uk/news/article-2982499/Ukraine-puts-murdered-Russian-opposition-chief-s-glamorous-model-girlfriend-secret-service-protection-death-threats.html&quot;
-[18] &quot;http://www.dailymail.co.uk/wires/ap/article-2982330/Kremlin-critic-Navalny-released-15-days-custody.html&quot;                                                                
-[19] &quot;http://www.dailymail.co.uk/wires/ap/article-2982306/Witness-Russian-politicians-slaying-gets-death-threats.html&quot;                                                         
-[20] &quot;http://www.dailymail.co.uk/wires/reuters/article-2982305/Kremlin-critic-Navalny-walks-Moscow-jail.html&quot;                                                                  
-[21] &quot;http://www.dailymail.co.uk/news/article-2982194/Hand-scrawled-notes-Russian-opposition-figure-written-day-shot-dead-trail-Moscow-backing-separatist-fighters.html&quot;       
-[22] &quot;http://www.dailymail.co.uk/wires/reuters/article-2981498/Putins-suppression-blame-Nemtsovs-death--NATO-official.html&quot;                                                    
-[23] &quot;http://www.dailymail.co.uk/wires/reuters/article-2981421/Scribbled-note-shows-Nemtsov-trail-Russian-deaths-Ukraine.html&quot;                                                 
-[24] &quot;http://www.dailymail.co.uk/wires/reuters/article-2981085/Italys-Renzi-lays-flowers-Moscow-bridge-Nemtsov-killed.html&quot;                                                    
-[25] &quot;http://www.dailymail.co.uk/wires/ap/article-2981048/Italian-PM-Moscow-discuss-Russia-EU-ties.html&quot;                                                                       
-[26] &quot;http://www.dailymail.co.uk/video/news/video-1164466/Vladimir-Putin-calls-the-murder-of-Boris-Nemtsov-political.html&quot;                                                     
-[27] &quot;http://www.dailymail.co.uk/wires/reuters/article-2979242/Britain-wont-Fridmans-North-Sea-deal-RWE-government-source.html&quot;                                                
-[28] &quot;http://www.dailymail.co.uk/news/article-2979206/Vladimir-Putin-calls-end-shameful-political-assassinations-Russia-shooting-Kremlin-critic-Boris-Nemtsov.html&quot;            
-[29] &quot;http://www.dailymail.co.uk/wires/reuters/article-2979068/Russias-Putin-calls-Nemtsovs-murder-political.html&quot;                                                             
-[30] &quot;http://www.dailymail.co.uk/wires/ap/article-2979019/Putin-says-opposition-politicians-murder-disgrace.html&quot;                                                              
-[31] &quot;http://www.dailymail.co.uk/wires/ap/article-2977725/Kremlin-critic-wants-international-probe-Nemtsov-death.html&quot;                                                         
-[32] &quot;http://www.dailymail.co.uk/wires/reuters/article-2977688/Russia-bars-two-EU-politicians-Nemtsov-funeral.html&quot;                                                            
-[33] &quot;http://www.dailymail.co.uk/video/news/video-1164117/Crowds-pay-their-last-respects-by-the-coffin-of-Boris-Nemtsov.html&quot;                                                  
-[34] &quot;http://www.dailymail.co.uk/wires/reuters/article-2977491/Russia-bars-two-EU-dignitaries-Nemtsov-funeral.html&quot;                                                            
-[35] &quot;http://www.dailymail.co.uk/wires/ap/article-2977522/EU-condemns-Russia-Nemtsov-funeral-bans.html&quot;                                                                        
-[36] &quot;http://www.dailymail.co.uk/wires/reuters/article-2977465/Merkel-says-push-freedom-expression-Russia.html&quot;                                                                
-[37] &quot;http://www.dailymail.co.uk/wires/reuters/article-2977289/Russians-stand-line-mourn-coffin-murdered-Nemtsov.html&quot;                                                         
-[38] &quot;http://www.dailymail.co.uk/news/article-2977093/Mourners-pay-respects-murdered-Russian-opposition-leader-laid-state-open-casket.html&quot;                                    
-[39] &quot;http://www.dailymail.co.uk/money/markets/article-2977047/FTSE-LIVE-Footsie-rides-high-record-gains-overnight-Dow-Jones-S-P-500-hit-time-highs.html&quot;                      
-[40] &quot;http://www.dailymail.co.uk/wires/reuters/article-2977048/Mourners-pay-respects-murdered-Kremlin-critic-Nemtsov.html&quot;                                                     
-[41] &quot;http://www.dailymail.co.uk/wires/ap/article-2976976/Mourners-view-body-slain-opposition-leader-Boris-Nemtsov.html&quot;                                                       
-[42] &quot;http://www.dailymail.co.uk/wires/reuters/article-2976581/President-Obama-Israels-Netanyahu-clash-Iran-diplomacy.html&quot;                                                    
-[43] &quot;http://www.dailymail.co.uk/wires/reuters/article-2976452/Nemtsov-killing-sign-worsening-climate-Russia-Obama.html&quot;                                                       
-[44] &quot;http://www.dailymail.co.uk/wires/ap/article-2975951/Polish-senator-Russia-banned-Nemtsovs-funeral.html&quot;                                                                  
-[45] &quot;http://www.dailymail.co.uk/wires/reuters/article-2975874/Blood-near-Kremlin-Russias-media-fight-back.html&quot;                                                               
-[46] &quot;http://www.dailymail.co.uk/news/article-2975829/You-die-extremist-trolls-warn-glamorous-Putin-goddaughter-supports-opposition.html&quot;                                      
-[47] &quot;http://www.dailymail.co.uk/wires/reuters/article-2975823/Nemtsovs-shaken-girlfriend-says-didnt-killer.html&quot;                                                              
-[48] &quot;http://www.dailymail.co.uk/wires/ap/article-2975711/McCain-calls-Obamas-foreign-policy-delusional.html&quot;                                                                  
-[49] &quot;http://www.dailymail.co.uk/wires/ap/article-2975639/US-ambassadors-Cyprus-Russia-tweet-upsets-Cypriot-president.html&quot;                                                    
-[50] &quot;http://www.dailymail.co.uk/wires/ap/article-2975515/Monday-March-2-2015.html&quot;                                                                                            
-[51] &quot;http://www.dailymail.co.uk/wires/ap/article-2975502/Russias-FM-Killing-Nemtsov-heinous-probed.html&quot;                                                                      
+ [2] &quot;http://www.dailymail.co.uk/wires/reuters/article-2985383/Suspect-Nemtsov-killing-devout-Muslim-shocked-Charlie-Hebdo-cartoons--Chechen-leader.html&quot;                      
+ [3] &quot;http://www.dailymail.co.uk/video/news/video-1165510/Suspects-in-killing-of-Boris-Nemtsov-appear-in-Moscow-courthouse.html&quot;                                               
+ [4] &quot;http://www.dailymail.co.uk/video/news/video-1165505/Boris-Nemtsov-shooting-suspects-seen-caged-in-court.html&quot;                                                            
+ [5] &quot;http://www.dailymail.co.uk/wires/reuters/article-2985103/Russian-court-orders-three-Nemtsov-suspects-kept-custody.html&quot;                                                  
+ [6] &quot;http://www.dailymail.co.uk/news/article-2985051/Five-suspects-court-assassination-Vladimir-Putin-critic-Boris-Nemtsov-one-revealed-policeman-served-Chechnya.html&quot;       
+ [7] &quot;http://www.dailymail.co.uk/wires/reuters/article-2985011/Russian-authorities-charge-two-Nemtsov-shooting.html&quot;                                                           
+ [8] &quot;http://www.dailymail.co.uk/wires/ap/article-2984912/Nemtsov-killing-suspects-whereabouts-unknown.html&quot;                                                                   
+ [9] &quot;http://www.dailymail.co.uk/wires/reuters/article-2984865/One-Nemtsov-killing-suspects-served-police-report.html&quot;                                                         
+[10] &quot;http://www.dailymail.co.uk/wires/reuters/article-2984828/One-Nemtsov-killing-suspects-served-police-report.html&quot;                                                         
+[11] &quot;http://www.dailymail.co.uk/video/news/video-1165340/Russia-announces-two-arrests-in-Boris-Nemtsov-murder.html&quot;                                                           
+[12] &quot;http://www.dailymail.co.uk/wires/ap/article-2983910/Saturday-March-7-2015.html&quot;                                                                                          
+[13] &quot;http://www.dailymail.co.uk/wires/reuters/article-2983867/Two-suspects-detained-Nemtsov-murder--Russian-security-chief.html&quot;                                              
+[14] &quot;http://www.dailymail.co.uk/news/article-2983864/Russia-arrests-two-murder-Putin-opponent-gunned-outside-Kremlin.html&quot;                                                    
+[15] &quot;http://www.dailymail.co.uk/wires/ap/article-2983856/Russia-2-suspects-detained-murder-Boris-Nemtsov.html&quot;                                                                
+[16] &quot;http://www.dailymail.co.uk/wires/reuters/article-2983240/Nemtsovs-friends-ask-police-shot.html&quot;                                                                          
+[17] &quot;http://www.dailymail.co.uk/wires/reuters/article-2982521/Kremlin-critic-Navalny-jail-vows-fight-on.html&quot;                                                                 
+[18] &quot;http://www.dailymail.co.uk/news/article-2982499/Ukraine-puts-murdered-Russian-opposition-chief-s-glamorous-model-girlfriend-secret-service-protection-death-threats.html&quot;
+[19] &quot;http://www.dailymail.co.uk/wires/ap/article-2982330/Kremlin-critic-Navalny-released-15-days-custody.html&quot;                                                                
+[20] &quot;http://www.dailymail.co.uk/wires/ap/article-2982306/Witness-Russian-politicians-slaying-gets-death-threats.html&quot;                                                         
+[21] &quot;http://www.dailymail.co.uk/wires/reuters/article-2982305/Kremlin-critic-Navalny-walks-Moscow-jail.html&quot;                                                                  
+[22] &quot;http://www.dailymail.co.uk/news/article-2982194/Hand-scrawled-notes-Russian-opposition-figure-written-day-shot-dead-trail-Moscow-backing-separatist-fighters.html&quot;       
+[23] &quot;http://www.dailymail.co.uk/wires/reuters/article-2981498/Putins-suppression-blame-Nemtsovs-death--NATO-official.html&quot;                                                    
+[24] &quot;http://www.dailymail.co.uk/wires/reuters/article-2981421/Scribbled-note-shows-Nemtsov-trail-Russian-deaths-Ukraine.html&quot;                                                 
+[25] &quot;http://www.dailymail.co.uk/wires/reuters/article-2981085/Italys-Renzi-lays-flowers-Moscow-bridge-Nemtsov-killed.html&quot;                                                    
+[26] &quot;http://www.dailymail.co.uk/wires/ap/article-2981048/Italian-PM-Moscow-discuss-Russia-EU-ties.html&quot;                                                                       
+[27] &quot;http://www.dailymail.co.uk/video/news/video-1164466/Vladimir-Putin-calls-the-murder-of-Boris-Nemtsov-political.html&quot;                                                     
+[28] &quot;http://www.dailymail.co.uk/wires/reuters/article-2979242/Britain-wont-Fridmans-North-Sea-deal-RWE-government-source.html&quot;                                                
+[29] &quot;http://www.dailymail.co.uk/news/article-2979206/Vladimir-Putin-calls-end-shameful-political-assassinations-Russia-shooting-Kremlin-critic-Boris-Nemtsov.html&quot;            
+[30] &quot;http://www.dailymail.co.uk/wires/reuters/article-2979068/Russias-Putin-calls-Nemtsovs-murder-political.html&quot;                                                             
+[31] &quot;http://www.dailymail.co.uk/wires/ap/article-2979019/Putin-says-opposition-politicians-murder-disgrace.html&quot;                                                              
+[32] &quot;http://www.dailymail.co.uk/wires/ap/article-2977725/Kremlin-critic-wants-international-probe-Nemtsov-death.html&quot;                                                         
+[33] &quot;http://www.dailymail.co.uk/wires/reuters/article-2977688/Russia-bars-two-EU-politicians-Nemtsov-funeral.html&quot;                                                            
+[34] &quot;http://www.dailymail.co.uk/video/news/video-1164117/Crowds-pay-their-last-respects-by-the-coffin-of-Boris-Nemtsov.html&quot;                                                  
+[35] &quot;http://www.dailymail.co.uk/wires/reuters/article-2977491/Russia-bars-two-EU-dignitaries-Nemtsov-funeral.html&quot;                                                            
+[36] &quot;http://www.dailymail.co.uk/wires/ap/article-2977522/EU-condemns-Russia-Nemtsov-funeral-bans.html&quot;                                                                        
+[37] &quot;http://www.dailymail.co.uk/wires/reuters/article-2977465/Merkel-says-push-freedom-expression-Russia.html&quot;                                                                
+[38] &quot;http://www.dailymail.co.uk/wires/reuters/article-2977289/Russians-stand-line-mourn-coffin-murdered-Nemtsov.html&quot;                                                         
+[39] &quot;http://www.dailymail.co.uk/news/article-2977093/Mourners-pay-respects-murdered-Russian-opposition-leader-laid-state-open-casket.html&quot;                                    
+[40] &quot;http://www.dailymail.co.uk/money/markets/article-2977047/FTSE-LIVE-Footsie-rides-high-record-gains-overnight-Dow-Jones-S-P-500-hit-time-highs.html&quot;                      
+[41] &quot;http://www.dailymail.co.uk/wires/reuters/article-2977048/Mourners-pay-respects-murdered-Kremlin-critic-Nemtsov.html&quot;                                                     
+[42] &quot;http://www.dailymail.co.uk/wires/ap/article-2976976/Mourners-view-body-slain-opposition-leader-Boris-Nemtsov.html&quot;                                                       
+[43] &quot;http://www.dailymail.co.uk/wires/reuters/article-2976581/President-Obama-Israels-Netanyahu-clash-Iran-diplomacy.html&quot;                                                    
+[44] &quot;http://www.dailymail.co.uk/wires/reuters/article-2976452/Nemtsov-killing-sign-worsening-climate-Russia-Obama.html&quot;                                                       
+[45] &quot;http://www.dailymail.co.uk/wires/ap/article-2975951/Polish-senator-Russia-banned-Nemtsovs-funeral.html&quot;                                                                  
+[46] &quot;http://www.dailymail.co.uk/wires/reuters/article-2975874/Blood-near-Kremlin-Russias-media-fight-back.html&quot;                                                               
+[47] &quot;http://www.dailymail.co.uk/news/article-2975829/You-die-extremist-trolls-warn-glamorous-Putin-goddaughter-supports-opposition.html&quot;                                      
+[48] &quot;http://www.dailymail.co.uk/wires/reuters/article-2975823/Nemtsovs-shaken-girlfriend-says-didnt-killer.html&quot;                                                              
+[49] &quot;http://www.dailymail.co.uk/wires/ap/article-2975711/McCain-calls-Obamas-foreign-policy-delusional.html&quot;                                                                  
+[50] &quot;http://www.dailymail.co.uk/wires/ap/article-2975639/US-ambassadors-Cyprus-Russia-tweet-upsets-Cypriot-president.html&quot;                                                    
+[51] &quot;http://www.dailymail.co.uk/wires/ap/article-2975515/Monday-March-2-2015.html&quot;                                                                                            
 </code></pre>
 
 <pre><code class="r">links=paste(&#39;http://www.dailymail.co.uk&#39;,links,sep=&#39;&#39;)
@@ -1433,7 +1442,7 @@ head(links)
 </div>
 
 </section>
-<section data-state="sq1" data-transition="linear" data-transition-speed="default">
+<section data-state="sq2" data-transition="linear" data-transition-speed="default">
 <h3>Solution</h3>
 <div class="slideContent" >
 <pre><code class="r">url &lt;- &#39;http://www.bbc.co.uk/search?q=nemtsov&#39;
@@ -1601,7 +1610,7 @@ dat &lt;- ldply(links,bbcScraper)
 </div>
 
 </section>
-<section data-state="sq" data-transition="linear" data-transition-speed="default">
+<section data-state="sq2" data-transition="linear" data-transition-speed="default">
 <h3>Guardian scraper</h3>
 <div class="slideContent" >
 <pre><code class="r">guardianScraper &lt;- function(url){
