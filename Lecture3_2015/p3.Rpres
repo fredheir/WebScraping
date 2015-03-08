@@ -1,0 +1,720 @@
+```{r setup, include=FALSE}
+
+```
+
+Digital Data Collection - The Hard Way
+========================================================
+width: 1200
+author: Rolf Fredheim and Yulia Shenderovich
+date: University of Cambridge
+font-family: 'Rockwell'
+css:style.css
+
+10/03/2015
+
+
+Logging on
+========================================================
+type: s1
+
+Before you sit down:
+- Do you have your MCS password?
+- Do you have your Raven password?
+  - If you answered **'no'** to either then go to the University Computing Services (just outside the door) NOW!
+- Are you registered? If not, see me!
+
+
+
+Download these slides 
+========================================================
+
+Follow link from course description on the SSRMC pages or go directly to 
+http://fredheir.github.io/WebScraping/
+
+Download the R file to your computer
+
+
+
+Install the following packages:
+===============
+XML
+RCurl
+lubridate
+plyr
+stringr
+
+
+
+Recap
+================
+**Week1**
+- Basic principles of data collection
+- Basics of text manipulation in R
+- Simple scraping example
+
+**Week2**
+- Utility functions
+- JSON and APIs
+
+What's the problem with APIs?
+===================
+- Overkill
+- Rate limiting
+- Authentication
+- Web content may be richer
+- Deprecation
+  - https://developers.google.com/youtube/2.0/developers_guide_protocol_deprecated
+  - https://blog.twitter.com/2013/api-v1-is-retired
+
+Today we will
+================
+Work with html to
+- extract tables
+- extract links
+- extract information using class and id tags
+- write a two-stage scraper to download newspaper articles
+
+For that we will need
+================
+To use Google Chrome of Mozilla Firefox. 
+
+No Internet Explorer or Safari please!
+
+
+
+Load the packages
+=================
+```{r}
+require(lubridate)
+require(plyr)
+require(stringr)
+require(XML)
+require(RCurl)
+```
+
+
+Getting to know HTML structure
+==============================
+
+- http://en.wikipedia.org/wiki/Euromaidan
+- http://en.wikipedia.org/wiki/Boris_Nemtsov
+
+Let's look at this webpage
+
+- Headings
+- Images
+- links
+- references
+- tables
+
+To look at the code (in Google Chrome), right-click somewhere on the page and select 'inspect element'
+
+Tree-structure (parents, siblings)
+
+Back to Wikipedia
+====================
+HTML tags.
+
+They come in pairs and are surrounded by these guys:
+<>
+
+e.g. a heading might look like this:
+
+\<h1\>MY HEADING\</h1\>
+<h1>MY HEADING</h1>
+
+Which others do you know or can you find?
+
+Extracting a table
+==============
+type:s1
+can be a bit fiddly to format, but quite accessible:
+```{r}
+url='http://en.wikipedia.org/wiki/Elections_in_Russia'
+tables<-readHTMLTable(url)
+head(tables[[6]])
+```
+
+
+Download html
+=====================
+type:s1
+Dont print a webpage like this to the console!
+
+Download using readLines()
+or getURL() (RCurl)
+
+Rstudio will probably crash
+
+use head(), str(), summary(), tail() etc. to inspect data.
+
+
+```{r}
+url  <- "http://en.wikipedia.org/wiki/Boris_Nemtsov"
+raw <-  getURL(url,encoding="UTF-8") #Download the page
+#this is a very very long line. Let's not print it. Instead:
+substring (raw,1,200)
+PARSED <- htmlParse(raw) #Format the html code d
+```
+
+
+
+
+Accessing HTML elements in R
+========
+type:sq
+
+Reading: 
+http://www.w3schools.com/xpath/xpath_intro.asp
+
+we can use XPath expressions to extract elements from HTML
+
+```{r}
+xpathSApply(PARSED, "//h1")
+```
+
+Not so pretty. But! Specifying xmlValue strips away the surrounding code and returns only the content of the tag
+
+```{r}
+xpathSApply(PARSED, "//h1",xmlValue)
+```
+
+
+
+HTML tags
+======================
+
+- \<html>: starts html code
+- \<head> : contains meta data etc
+- \<script> : e.g. javascript to be loaded
+- \<style> : css code
+- \<meta> : denotes document properties, e.g. author, keywords
+- \<title> : 
+- \<body> : 
+
+HTML tags2
+======================
+
+- \<div>, \<span> :these are used to break up a document into sections and boxes
+- \<h1>,\<h2>,\<h3>,\<h4>,\<h5> Different levels of heading
+- \<p> : paragraph
+- \<br> : line break
+- and others: \<a>, \<ul>, \<tbody>, \<th>, \<td>, \<ul>, \<ul>, <img>
+
+
+
+Digging deeper
+=====================
+type:s1
+What about other headings?
+
+```{r}
+xpathSApply(PARSED, "//h3",xmlValue)
+```
+
+Line ten... 'search'. Remember the clever  str_trim() function?
+
+```{r}
+temp=xpathSApply(PARSED, "//h3",xmlValue)
+
+str_trim(temp[10])
+```
+
+
+
+Extracting links
+=========
+and links
+```{r}
+length(xpathSApply(PARSED, "//a/@href"))
+```
+That's hundreds of links!!! That's hopeless. We want to be more selective. Back to the drawing board
+
+
+
+CSS and XPath
+===============
+type: sq
+web-designers use Cascading Style Sheets to determine the way a webpage looks
+
+Like variables: change the style, rather than the every item on a page
+
+I use CSS for these slides, check out the code for this page
+
+<strong>CSS allows us to make better selections, by latching onto tags</strong>
+
+**Xpath allows us to move up and down the html tree structure**
+
+CSS can be an html **attribute**
+
+
+Principles of scraping
+=============
+- Identify the tag
+- Download the web-page
+- Extract content matching the tag
+- Save the content
+- Optional: repeat
+
+
+Get references
+=======================
+type:sq
+
+Content of the references
+```{r}
+head(xpathSApply(PARSED, "//span[@class='reference-text']",xmlValue))
+```
+***
+URLS
+```{r}
+head(as.character(xpathSApply(PARSED, "//span[@class='reference-text']/span/a/@href")))
+```
+
+Sanity test
+==========
+Test that these work, using browseURL()
+
+```{r eval=FALSE}
+links <- (xpathSApply(PARSED, "//span[@class='reference-text']/span/a/@href"))
+browseURL(links[1])
+```
+
+So if you wanted to, you could scrape these links in turn.
+
+tree-structure is navigated a bit like that on your computer (c:/windows/system)
+
+
+
+XPath
+==================
+
+Is a language for querying XML
+
+Reading and examples: http://www.w3schools.com/xml/xml_xpath.asp
+
+The element in quotes below is an *XPath expression*
+
+```{r eval=F}
+head(xpathSApply(PARSED, "//span[@class='reference-text']/span/a/@href"))
+
+```
+
+
+Fundamental XPath Syntax
+===============
+
+- /      Select from the root
+- //     Select anywhere in document
+- @      Select attributes. Use in square brackets
+
+In this example, we select all elements of 'span'
+...Which have an **attribute** "class" of the value "citation news"
+...then we select all links
+...and return all attributes labeled "href" (the urls)
+
+
+```{r eval=F}
+head(xpathSApply(PARSED, "//span[@class='reference-text']/span/a/@href"))
+```
+
+
+XPath2
+============
+type:sq1
+
+Like in R, we use square brackets to make selections
+
+What does this select?
+```{r}
+head(xpathSApply(PARSED, "//span[@class='reference-text'][17]/span/a/@href"))
+```
+
+
+
+Wildcards
+======================
+type:sq2
+
+We can also use wildcards:
+
+- * selects any node or tag
+- @* selects any attribute (used to define nodes)
+```{r}
+(xpathSApply(PARSED, "//*[@class='citation news'][17]/a/@href"))
+(xpathSApply(PARSED, "//span[@class='citation news'][17]/a/@*"))
+```
+
+Scrape Telegraph
+=======================
+type:s1
+http://www.telegraph.co.uk/search/?queryText=nemtsov&sort=relevant
+
+Note: this is a get request (see the ? and & characters?)
+
+```{r}
+url <- 'http://www.telegraph.co.uk/search/?queryText=nemtsov&sort=relevant'
+raw <-  getURL(url)#,encoding="UTF-8") 
+PARSED <- htmlParse(raw) #Format the html code d
+links<-xpathSApply(PARSED, "//a/@href")
+length(links)
+links<-xpathSApply(PARSED, "//div[@class='searchresults']//a/@href")
+length(links)
+length(unique(links))
+links<-unique(links)
+
+links<-links[grep('http',links)]
+```
+
+Daily Mail
+======
+type:s1
+```{r}
+url <- 'http://www.dailymail.co.uk/home/search.html?sel=site&searchPhrase=nemtsov'
+raw <-  getURL(url)#,encoding="UTF-8") 
+PARSED <- htmlParse(raw) #Format the html code d
+links<-xpathSApply(PARSED, "//a/@href")
+length(links)
+links<-xpathSApply(PARSED, "//div[@class='sch-results']//a/@href")
+length(links)
+length(unique(links))
+links<-unique(links)
+
+head(links)
+
+paste('http://www.dailymail.co.uk',links,sep='')
+links=paste('http://www.dailymail.co.uk',links,sep='')
+```
+
+
+Feedback time
+=====================
+
+Go here
+
+
+
+to evaluate the course
+
+Scrape BBC
+=======================
+type:alert
+Do the same for this page:
+
+http://www.bbc.co.uk/search?q=nemtsov
+
+
+
+
+
+
+
+
+
+
+Solution
+============
+type:s1
+```{r}
+url <- 'http://www.bbc.co.uk/search?q=nemtsov'
+raw <-  getURL(url,encoding="UTF-8") 
+PARSED <- htmlParse(raw) #Format the html code d
+links<-xpathSApply(PARSED, "//a/@href")
+length(links)
+links<-xpathSApply(PARSED, '//ol[@class="search-results results"]//a/@href')
+length(links)
+length(unique(links))
+links<-unique(links)
+```
+
+Make function to get links
+===========
+
+```{r}
+getBBCLinks <- function(url){
+  raw <-  getURL(url,encoding="UTF-8") 
+  PARSED <- htmlParse(raw) #Format the html code d
+  links<-unique(xpathSApply(PARSED, '//ol[@class="search-results results"]//a/@href'))
+  return (links)
+}
+
+
+url='http://www.bbc.co.uk/search?q=putin'
+links <-getBBCLinks(url)
+links
+```
+
+
+BBC article scraper
+================
+type:sq
+```{r}
+url <- "http://www.bbc.co.uk/news/world-europe-26333587"
+SOURCE <-  getURL(url,encoding="UTF-8") # Specify encoding when dealing with non-latin characters
+PARSED <- htmlParse(SOURCE)
+```
+Get the headline:
+```{r}
+(xpathSApply(PARSED, "//h1[@class='story-header']",xmlValue))
+```
+Get the date:
+```{r}
+(xpathSApply(PARSED, "//span[@class='date']",xmlValue))
+```
+
+
+
+Make a scraper
+===============
+
+```{r}
+bbcScraper <- function(url){
+  date=''
+  title=''
+  SOURCE <-  getURL(url,encoding="UTF-8")
+  PARSED <- htmlParse(SOURCE)
+  title=xpathSApply(PARSED, "//title",xmlValue)
+  date=xpathSApply(PARSED, "//meta[@name='OriginalPublicationDate']/@content")
+  d=data.frame(url,title,date)
+  return(d)
+}
+
+url='http://www.bbc.co.uk/search?q=putin'
+links <-getBBCLinks(url)
+
+dat <- ldply(links,bbcScraper)
+```
+
+
+Guardian
+=======================
+type:sq 2
+start with the bbc scraper as a base, then change the necessary fields
+
+```{r}
+url <- "http://www.theguardian.com/environment/2015/mar/08/how-will-everything-change-under-climate-change"
+  SOURCE <-  getURL(url,encoding="UTF-8")
+  PARSED <- htmlParse(SOURCE)
+  xpathSApply(PARSED, "//h1[contains(@itemprop,'headline')]",xmlValue)
+  xpathSApply(PARSED, "//a[@rel='author']",xmlValue)
+  xpathSApply(PARSED, "//time[@itemprop='datePublished']",xmlValue)
+```
+
+Guardian continued
+===========
+type:sq2
+
+```{r}
+  xpathSApply(PARSED, "//time[@itemprop='datePublished']/@datetime")
+  xpathSApply(PARSED, "//li[@class='inline-list__item ']/a",xmlValue)
+  xpathSApply(PARSED, "//div[@itemprop='articleBody']",xmlValue)
+```
+
+
+Guardian scraper
+======================
+type:sq
+```{r}
+guardianScraper <- function(url){
+  SOURCE <-  getURL(url,encoding="UTF-8")
+  PARSED <- htmlParse(SOURCE)
+  headline = author =date = tags = body =''
+  headline<-xpathSApply(PARSED, "//h1[contains(@itemprop,'headline')]",xmlValue)
+  author<-xpathSApply(PARSED, "//a[@rel='author']",xmlValue)
+  date<-as.character(xpathSApply(PARSED, "//time[@itemprop='datePublished']/@datetime"))
+  tags<-xpathSApply(PARSED, "//li[@class='inline-list__item ']/a",xmlValue)
+  tags<-paste(tags,collapse=',')
+  body<-xpathSApply(PARSED, "//div[@itemprop='articleBody']",xmlValue)
+  d<- tryCatch(
+    {
+      d=data.frame(url,headline,author,date,tags,body)      
+    },error=function(cond){
+      return(NULL)
+    }
+    )
+}
+
+
+```
+
+Get Guardian links
+=====================
+type:s1
+scraping is getting harder
+
+```{r}
+url='http://www.theguardian.com/world/russia?page=7'
+getGuardianLinks <- function(url){
+  raw <-  getURL(url,encoding="UTF-8") 
+  PARSED <- htmlParse(raw) #Format the html code d
+  links<-unique(xpathSApply(PARSED, '//div[@class="fc-item__container"]//a/@href'))
+  return (links)
+}
+
+links <- getGuardianLinks(url)
+dat<-ldply(links[1:8],guardianScraper)
+head(dat[,1:5])
+```
+
+Tidy the data
+=====================
+
+```{r eval=F}
+gsub('\n','',dat$tags)
+as.Date(dat$date)
+gsub('\n','',dat$headline)
+
+dat$tags <-gsub('\n','',dat$tags)
+dat$date <-as.Date(dat$date)
+dat$headline <-gsub('\n','',dat$headline)
+```
+
+lubridate for dates
+============
+
+```{r}
+time="2015-02-09T14:59:32+0000"
+ymd_hms(time)
+time="\nMonday 23 February 2015\n"
+dmy(time)
+time='06/12/2013'
+dmy(time)
+mdy(time)
+```
+
+
+Practice time
+================
+type: section
+
+write a scraper for:
+- http://www.mirror.co.uk/
+- http://www.telegraph.co.uk/
+- http://www.independent.co.uk
+
+
+
+
+Solutions (1: Mirror)
+==================
+type:sq1
+
+Can you turn these into scraper functions?
+Mirror
+```{r}
+#MIRROR
+url <- "http://www.mirror.co.uk/news/world-news/oscar-pistorius-trial-murder-reeva-3181393"
+SOURCE <-  getURL(url,encoding="UTF-8") 
+PARSED <- htmlParse(SOURCE)
+title <- xpathSApply(PARSED, "//h1",xmlValue)
+author <- xpathSApply(PARSED, "//li[@class='author']",xmlValue)
+time  <- xpathSApply(PARSED, "//time[@itemprop='datePublished']/@datetime")
+```
+
+Telegraph
+============
+type:sq1
+
+```{r}
+#Telegraph
+url <- "http://www.telegraph.co.uk/news/uknews/terrorism-in-the-uk/10659904/Former-Guantanamo-detainee-Moazzam-Begg-one-of-four-arrested-on-suspicion-of-terrorism.html"
+SOURCE <-  getURL(url,encoding="UTF-8") 
+PARSED <- htmlParse(SOURCE)
+title <- xpathSApply(PARSED, "//h1[@itemprop='headline name']",xmlValue)
+author <- xpathSApply(PARSED, "//p[@class='bylineBody']",xmlValue)
+time  <- xpathSApply(PARSED, "//p[@class='publishedDate']",xmlValue)
+```
+
+Independent
+==============
+type:sq1
+```{r eval=F}
+#Independent
+url <- "http://www.independent.co.uk/news/people/emma-watson-issues-feminist-response-to-prince-harry-speculation-marrying-a-prince-is-not-prerequisite-to-being-a-princess-10064025.html"
+SOURCE <-  getURL(url,encoding="UTF-8")
+PARSED <- htmlParse(SOURCE)
+title <- xpathSApply(PARSED, "//h1",xmlValue)
+author <- xpathSApply(PARSED, "//span[@class='authorName']",xmlValue)
+time  <- xpathSApply(PARSED, "//p[@class='dateline']",xmlValue)
+as.Date(str_trim(time),"%d %B %Y")
+```
+
+
+Where do we go from here
+=======================
+Scale up, store data, retrieve:
+
+- R + sql + data.table
+- python + mongodb
+- python + selenium -> javascript and logons. 
+
+R for tables
+
+Python for objects
+
+
+<!-- CSS formatting used in these slides -->
+
+<style>.s1 .reveal .state-background {
+  background: #E0E0FF;
+} 
+
+.sq1 .reveal section code {
+  font-size:145%;
+}
+.sq1 .reveal section p {
+  font-size:100%;
+}
+
+
+.sq .reveal section code {
+  font-size:125%;
+}
+.sq .reveal section p {
+  font-size:85%;
+}
+
+
+.sq2 .reveal section code {
+	font-size:100%;
+}
+.sq2 .reveal section p {
+  font-size:70%;
+}
+.reveal blockquote {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 5px auto;
+  padding: 5px;
+
+  font-style: normal;
+  background: #C6D7DC;
+  border: 1px solid #C6D7DC;
+  box-shadow: none;
+}
+
+.reveal pre {   
+  margin-top: 0;
+  max-width: 100%;
+  width: 100%;
+  border: 1px solid #ccc;
+  white-space: pre-wrap;
+  margin-bottom: 1em; 
+}
+
+.reveal pre code {
+/*  display: block; padding: 0.5em;
+*/  font-size: 1.6em;
+  line-height: 1.1em;
+  background-color: white;
+  overflow: visible;
+  max-height: none;
+  word-wrap: normal;
+}
+
+.reveal section centered {
+	text-align: center;
+   border: none;
+}
+</style>
