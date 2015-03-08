@@ -88,6 +88,7 @@ class Slide:
 	def setText(self):
 		self.content=self.content[0:-self.count]
 
+p=Page(fname)
 
 def main(argv=None):#take input file
 	import sys

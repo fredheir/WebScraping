@@ -55,7 +55,15 @@ text=readLines('tmp.txt')
 
 
 # Walkthrough ---------------------------------------
-
+length(text)
+text[7]
+length(unlist(str_split(text[7],' ')))
+table(length(unlist(str_split(text[7],' '))))
+words=sort(table(length(unlist(str_split(text[7],' ')))))
+tail(words)
+nchar(names(tail(words)))
+words=sort(table(length(unlist(str_split(text,' ')))))
+tail(words)
 
 
 # What do they do - grep ----------------------------
@@ -69,7 +77,11 @@ states[grep("y",states)]
 
 
 # Walkthrough2 --------------------------------------
-
+grep('London',text)
+grep('conspiracy',text)
+grep('amendment',text)
+grep('§',text)
+length(grep('§',text))
 
 
 # Regex ---------------------------------------------
@@ -89,7 +101,9 @@ grep('d\\>',stalinwords,value=T)
 
 
 # Walkthrough3 --------------------------------------
-
+grep('[Aa]mendment',text)
+grep('^[Aa]mendment',text)
+grep('\\?$',text)
 
 
 # What do they do: gsub -----------------------------
@@ -122,7 +136,15 @@ paste("http://stats.grok.se/json/en/",var,"/web_scraping",sep="")
 
 
 # Walkthrough ---------------------------------------
+a="test"
+b="scrape"
+c=94
 
+paste(a,b,c,sep='_')
+paste(a,b,c,sep='')
+#OR:
+paste0(a,b,c)
+paste('a',1:10,sep='')
 
 
 # Testing a URL is correct in R ---------------------
