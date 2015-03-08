@@ -8,7 +8,6 @@ width: 1200
 author: Rolf Fredheim and Yulia Shenderovich
 date: University of Cambridge
 font-family: 'Rockwell'
-css:style.css
 
 10/03/2015
 
@@ -95,6 +94,7 @@ require(RCurl)
 
 Getting to know HTML structure
 ==============================
+type:s1
 
 - http://en.wikipedia.org/wiki/Euromaidan
 - http://en.wikipedia.org/wiki/Boris_Nemtsov
@@ -205,7 +205,7 @@ HTML tags2
 
 Digging deeper
 =====================
-type:s1
+type:sq1
 What about other headings?
 
 ```{r}
@@ -347,7 +347,7 @@ We can also use wildcards:
 
 Scrape Telegraph
 =======================
-type:s1
+type:sq1
 http://www.telegraph.co.uk/search/?queryText=nemtsov&sort=relevant
 
 Note: this is a get request (see the ? and & characters?)
@@ -368,7 +368,7 @@ links<-links[grep('http',links)]
 
 Daily Mail
 ======
-type:s1
+type:sq1
 ```{r}
 url <- 'http://www.dailymail.co.uk/home/search.html?sel=site&searchPhrase=nemtsov'
 raw <-  getURL(url)#,encoding="UTF-8") 
@@ -414,7 +414,7 @@ http://www.bbc.co.uk/search?q=nemtsov
 
 Solution
 ============
-type:s1
+type:sq1
 ```{r}
 url <- 'http://www.bbc.co.uk/search?q=nemtsov'
 raw <-  getURL(url,encoding="UTF-8") 
@@ -429,7 +429,7 @@ links<-unique(links)
 
 Make function to get links
 ===========
-
+type:sq1
 ```{r}
 getBBCLinks <- function(url){
   raw <-  getURL(url,encoding="UTF-8") 
@@ -539,7 +539,7 @@ guardianScraper <- function(url){
 
 Get Guardian links
 =====================
-type:s1
+type:sq1
 scraping is getting harder
 
 ```{r}
@@ -571,7 +571,7 @@ dat$headline <-gsub('\n','',dat$headline)
 
 lubridate for dates
 ============
-
+type:sq1
 ```{r}
 time="2015-02-09T14:59:32+0000"
 ymd_hms(time)
