@@ -655,9 +655,9 @@ Scale up, store data, retrieve:
 - python + mongodb
 - python + selenium -> javascript and logons. 
 
-R for tables
+R for tables, vector operations, numbers.
 
-Python for objects
+Python for (irregular) objects, loops, text processing.
 
 
 <!-- CSS formatting used in these slides -->
