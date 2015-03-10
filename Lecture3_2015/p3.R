@@ -24,11 +24,16 @@ substring (raw,1,200)
 PARSED <- htmlParse(raw) #Format the html code d
 
 
-# Accessing HTML elements in R ----------------------
+# Accessing HTML elements in R with XPath -----------
 xpathSApply(PARSED, "//h1")
 
 
+# Extract content -----------------------------------
+xpathSApply(PARSED, "//h1",xmlValue)
+
+
 # Untitled  -----------------------------------------
+
 
 
 
@@ -54,10 +59,10 @@ HTML tags2
 
 
 
-Digging deeper
-=====================
-type:s1
 What about other headings?
+=====================
+type:sq2
+
 
 
 
@@ -82,12 +87,7 @@ links <- (xpathSApply(PARSED, "//span[@class='reference-text']/span/a/@href"))
 browseURL(links[1])
 
 
-# XPath ---------------------------------------------
-head(xpathSApply(PARSED, "//span[@class='reference-text']/span/a/@href"))
-
-
-
-# Fundamental XPath Syntax --------------------------
+# How it works --------------------------------------
 head(xpathSApply(PARSED, "//span[@class='reference-text']/span/a/@href"))
 
 
@@ -125,6 +125,8 @@ length(links)
 length(unique(links))
 links<-unique(links)
 
+
+# dt2 -----------------------------------------------
 head(links)
 
 paste('http://www.dailymail.co.uk',links,sep='')
@@ -204,7 +206,7 @@ guardianScraper <- function(url){
   PARSED <- htmlParse(SOURCE)
   headline = author =date = tags = body =''
   headline<-xpathSApply(PARSED, "//h1[contains(@itemprop,'headline')]",xmlValue)
-  author<-xpathSApply(PARSED, "//a[@rel='author']",xmlValue)
+  author<-xpathSApply(PARSED, "//a[@rel='author']",xmlValue)[1]
   date<-as.character(xpathSApply(PARSED, "//time[@itemprop='datePublished']/@datetime"))
   tags<-xpathSApply(PARSED, "//li[@class='inline-list__item ']/a",xmlValue)
   tags<-paste(tags,collapse=',')
@@ -213,6 +215,7 @@ guardianScraper <- function(url){
     {
       d=data.frame(url,headline,author,date,tags,body)      
     },error=function(cond){
+      print (paste('failed for page',url))
       return(NULL)
     }
     )

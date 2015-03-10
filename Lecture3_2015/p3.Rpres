@@ -160,24 +160,47 @@ PARSED <- htmlParse(raw) #Format the html code d
 
 
 
-Accessing HTML elements in R
+Accessing HTML elements in R with XPath
 ========
 type:sq
 
-Reading: 
-http://www.w3schools.com/xpath/xpath_intro.asp
+Is a language for querying XML
+
+Reading and examples: 
+- http://www.w3schools.com/xpath/xpath_intro.asp
+- http://www.w3schools.com/xml/xml_xpath.asp
+
 
 we can use XPath expressions to extract elements from HTML
+
+The element in quotes below is an *XPath expression* that selects the indicated node
 
 ```{r}
 xpathSApply(PARSED, "//h1")
 ```
 
+Extract content
+======
 Not so pretty. But! Specifying xmlValue strips away the surrounding code and returns only the content of the tag
+```{r}
+xpathSApply(PARSED, "//h1",xmlValue)
+```
+
+
+
+
+
+Fundamental XPath Syntax
+===============
+
+- /      Select from the root
+- //     Select anywhere in document
+- @      Select attributes. Use in square brackets
 
 ```{r}
 xpathSApply(PARSED, "//h1",xmlValue)
 ```
+
 
 
 
@@ -284,30 +307,8 @@ So if you wanted to, you could scrape these links in turn.
 
 tree-structure is navigated a bit like that on your computer (c:/windows/system)
 
-
-
-XPath
-==================
-
-Is a language for querying XML
-
-Reading and examples: http://www.w3schools.com/xml/xml_xpath.asp
-
-The element in quotes below is an *XPath expression*
-
-```{r eval=F}
-head(xpathSApply(PARSED, "//span[@class='reference-text']/span/a/@href"))
-
-```
-
-
-Fundamental XPath Syntax
-===============
-
-- /      Select from the root
-- //     Select anywhere in document
-- @      Select attributes. Use in square brackets
-
+How it works
+======
 In this example, we select all elements of 'span'
 ...Which have an **attribute** "class" of the value "citation news"
 ...then we select all links
@@ -399,7 +400,7 @@ Feedback time
 
 Go here
 
-
+http://cambridge.az1.qualtrics.com/SE/?SID=SV_0wZ2baCbLMqLqTz
 
 to evaluate the course
 
@@ -527,7 +528,7 @@ guardianScraper <- function(url){
   PARSED <- htmlParse(SOURCE)
   headline = author =date = tags = body =''
   headline<-xpathSApply(PARSED, "//h1[contains(@itemprop,'headline')]",xmlValue)
-  author<-xpathSApply(PARSED, "//a[@rel='author']",xmlValue)
+  author<-xpathSApply(PARSED, "//a[@rel='author']",xmlValue)[1]
   date<-as.character(xpathSApply(PARSED, "//time[@itemprop='datePublished']/@datetime"))
   tags<-xpathSApply(PARSED, "//li[@class='inline-list__item ']/a",xmlValue)
   tags<-paste(tags,collapse=',')
@@ -536,6 +537,7 @@ guardianScraper <- function(url){
     {
       d=data.frame(url,headline,author,date,tags,body)      
     },error=function(cond){
+      print (paste('failed for page',url))
       return(NULL)
     }
     )
