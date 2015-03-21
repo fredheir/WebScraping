@@ -394,16 +394,6 @@ paste('http://www.dailymail.co.uk',links,sep='')
 links=paste('http://www.dailymail.co.uk',links,sep='')
 ```
 
-
-Feedback time
-=====================
-
-Go here
-
-http://cambridge.az1.qualtrics.com/SE/?SID=SV_0wZ2baCbLMqLqTz
-
-to evaluate the course
-
 Scrape BBC
 =======================
 type:alert
