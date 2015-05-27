@@ -1,14 +1,13 @@
----
-title: Digital Data Collection - Programming Extras
-author: Rolf Fredheim
-date: 24/02/2015
-output: 
-  beamer_presentation:
-      theme: "CambridgeUS"
-      includes:
-        in_header: ../header.tex
 
----
+Digital Data Collection - programming extras
+========================================================
+width: 1200
+author: Rolf Fredheim
+date: University of Cambridge
+font-family: 'Rockwell'
+css:style.css
+
+24/02/2015
 
 Variables
 ==================================
@@ -52,7 +51,7 @@ rate <- 20
 
 Briefly about functions
 ===============
-
+type:sq
 
 ```r
 plusOne <- function(x){ 
@@ -118,7 +117,7 @@ for (number in 1:5){
 
 Looping over functions
 ========================
-
+type:sq
 
 ```r
 a <- c(1,2,3,4,5)
@@ -157,7 +156,7 @@ for (number in listOfNumbers){
 
 More loops
 ========================
-
+type:sq
 
 ```r
 a <- c(1,2,3,4,5)
@@ -234,160 +233,25 @@ print(ggplot(df, aes(v1,x3))+geom_point()+ggtitle("simulation of some sort"))
 =====
 Just as this slide hides the code on the previous slide, so the function hides the underlying code. 
 
-```r
-sillySimulation()
-```
-
-![plot of chunk unnamed-chunk-12](extra-figure/unnamed-chunk-12-1.png) 
-
-Inserting variables
-=========
-Let's hammer home how to use variables
-
-what variables could we add to the function below?
-
-```r
-desperateTimes <- function(){
-  print(paste0("Rolf is struggling to finish his PhD on time. Time remaining: 6 months"))
-}
-```
 
 
 
-Name
-===========
 
 
-```r
-desperateTimes <- function(name){
-  print(paste0(name ," is struggling to finish his PhD on time. Time remaining: 6 months"))
-}
-desperateTimes(name="Tom")
-```
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```
-[1] "Tom is struggling to finish his PhD on time. Time remaining: 6 months"
+Error in print(ggplot(df, aes(v1, x3)) + geom_point() + ggtitle("simulation of some sort")) : 
+  could not find function "ggplot"
 ```
-
-Gender
-===========
-
-we specify a default value
-
-```r
-desperateTimes <- function(name,gender="m"){
-  if(gender=="m"){
-    pronoun="his"
-  }else{
-    pronoun="her"
-  }
-  
-  print(paste0(name ," is struggling to finish ",pronoun," PhD on time. Time remaining: 6 months"))
-}
-desperateTimes(name="Tanya",gender="f")
-```
-
-```
-[1] "Tanya is struggling to finish her PhD on time. Time remaining: 6 months"
-```
-Is this a good function? Why (not)?
-
-degree
-==============
-
-```r
-desperateTimes <- function(name,gender="m",degree){
-  if(gender=="m"){
-    pronoun="his"
-  }else{
-    pronoun="her"
-  }
-  
-  print(paste0(name ," is struggling to finish ",pronoun," ",degree," on time. Time remaining: 6 months"))
-}
-desperateTimes(name="Rolf",gender="m","Mphil")
-```
-
-```
-[1] "Rolf is struggling to finish his Mphil on time. Time remaining: 6 months"
-```
-
-
-Days til deadline
-============
-
-
-```r
-require(lubridate)
-require(ggplot2)
-deadline=as.Date("2015-09-01")
-daysLeft <- deadline-Sys.Date()
-totDays <- deadline-as.Date("2011-10-01")
-print(daysLeft)
-```
-
-```
-Time difference of 190 days
-```
-
-```r
-print(paste0("Rolf is struggling to finish his PhD on time. Days remaining: ", as.numeric(daysLeft)))
-```
-
-```
-[1] "Rolf is struggling to finish his PhD on time. Days remaining: 190"
-```
-part2
-==========
-
-
-```r
-print(paste0("Percentage to go: ",round(as.numeric(daysLeft)/as.numeric(totDays)*100)))
-```
-
-```
-[1] "Percentage to go: 13"
-```
-
-```r
-df <- data.frame(days=c(daysLeft,totDays-daysLeft),lab=c("to go","completed"))
-ggplot(df,aes(1,days,fill=lab))+geom_bar(stat="identity",position="fill")
-```
-
-![plot of chunk unnamed-chunk-18](extra-figure/unnamed-chunk-18-1.png) 
-
-
-===========
-
-
-We could put all this code in a function, and forget about it
-
-```r
-timeToWorry <- function(){
-  require(lubridate)
-  deadline=as.Date("2015-09-01")
-  daysLeft <- deadline-Sys.Date()
-  totDays <- deadline-as.Date("2011-10-01")
-  print(daysLeft)
-  print(paste0("Rolf is struggling to finish his PhD on time. Days remaining: ", as.numeric(daysLeft)))
-  print(paste0("Percentage to go: ",round(as.numeric(daysLeft)/as.numeric(totDays)*100)))
-  df <- data.frame(days=c(daysLeft,totDays-daysLeft),lab=c("to go","completed"))
-  ggplot(df,aes(1,days,fill=lab))+geom_bar(stat="identity",position="fill")
-}
-```
-
-File it away until in need of a reminder
-======
-
-```r
-timeToWorry()
-```
-
-```
-Time difference of 190 days
-[1] "Rolf is struggling to finish his PhD on time. Days remaining: 190"
-[1] "Percentage to go: 13"
-```
-
-![plot of chunk unnamed-chunk-20](extra-figure/unnamed-chunk-20-1.png) 
-
